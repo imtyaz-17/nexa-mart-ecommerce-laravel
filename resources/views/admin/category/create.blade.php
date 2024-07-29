@@ -73,4 +73,23 @@
     <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+{{--     Dynamic Slug Generation--}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleInput = document.getElementById('name');
+            const slugInput = document.getElementById('slug');
+
+            titleInput.addEventListener('input', function() {
+                let slug = titleInput.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim();
+                slugInput.value = slug;
+            });
+        });
+    </script>
 @endsection
+

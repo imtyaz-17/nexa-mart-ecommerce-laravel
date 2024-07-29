@@ -11,7 +11,7 @@ class CategoryController extends Controller
     //
     public function index()
     {
-
+        $categories = Category::latest()->paginate(10);
     }
     public function create()
     {
