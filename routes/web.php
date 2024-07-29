@@ -18,7 +18,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
         // Category Routes
-        Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories');
+        Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
         Route::post('/categories/store', [CategoryController::class, 'store'])->name('admin.categories.store');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('admin.categories.show');
