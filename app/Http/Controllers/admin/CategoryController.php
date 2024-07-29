@@ -9,9 +9,16 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
+        $query = Category::query();
+        if ($request->has('keyword') && $request->keyword != '') {
+            $keyword = $request->keyword;
+            $query->where('name', 'LIKE', "%{$keyword}%")
+                ->orWhere('slug', 'LIKE', "%{$keyword}%");
+        }
+
+        $categories = $query->latest()->paginate(10);
         return view('admin.category.list', compact('categories'));
     }
     public function create()
