@@ -73,17 +73,41 @@ class SubCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SubCategory $subCategory)
+    public function edit($subCategoryId)
     {
-        //
+        $subCategory = SubCategory::find($subCategoryId);
+        if (empty($subCategory)) {
+            return redirect()->route('admin.subcategories.index')
+                ->with('error', 'Sub Category not found.');
+        }
+        $categories = Category::orderBy('name', 'ASC')->get();
+        return view('admin.sub_category.edit', compact('categories','subCategory'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SubCategory $subCategory)
+    public function update(Request $request, $subCategoryId)
     {
-        //
+        $subcategory = SubCategory::find($subCategoryId);
+        if (is_null($subcategory)) {
+            return redirect()->route('admin.subcategories.index')
+                ->with('error', 'Sub Category not found.');
+        }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|unique:sub_categories,slug,'.$subcategory->id.'|string|max:255',
+            'status' => 'required|boolean',
+            'category'=>'required|exists:categories,id',
+        ]);
+        $subcategory->name = $validated['name'];
+        $subcategory->slug = $validated['slug'];
+        $subcategory->status = $validated['status'];
+        $subcategory->category_id = $validated['category'];
+
+        $subcategory->save();
+
+        return redirect()->route('admin.subcategories.index')->with('success', 'Sub Category updated successfully');
     }
 
     /**
