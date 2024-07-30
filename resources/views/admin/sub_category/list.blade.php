@@ -110,7 +110,7 @@
     <!-- /.content -->
     <script type="text/javascript">
         function confirmDeletion() {
-            return confirm('Are you sure you want to delete this category? This action cannot be undone.');
+            return confirm('Are you sure you want to delete this sub category? This action cannot be undone.');
         }
     </script>
 @endsection
