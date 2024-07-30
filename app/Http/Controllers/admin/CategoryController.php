@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class CategoryController extends Controller
 {
@@ -31,6 +33,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|unique:categories|string|max:255',
             'status' => 'required|boolean',
+            'image' => 'nullable|string',
         ]);
 
         $category = new Category();
@@ -38,9 +41,36 @@ class CategoryController extends Controller
         $category->slug = $validated['slug'];
         $category->status = $validated['status'];
 
+        if (!empty($request->image)){
+            $category->image = $request->image;
+
+            //  Generate Image Thumbnail
+            $imagePath = public_path('uploads/categoryImage/' . $category->image);
+            $thumbnailPath = public_path('uploads/categoryImage/thumb/' . $category->image);
+
+            $manager = new ImageManager(new Driver());
+            $thumbnail  =  $manager->read($imagePath);
+            $thumbnail->cover(400, 300);
+            $thumbnail->save($thumbnailPath);
+        }
         $category->save();
 
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
+    }
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/categoryImage'), $image_name);
+            return response()->json(['image' => $image_name]);
+        }
+
+        return response()->json(['error' => 'No file uploaded'], 400);
     }
     public function show(Category $category)
     {

@@ -19,7 +19,7 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            <form action="{{route('admin.categories.store')}}" method="POST">
+            <form action="{{route('admin.categories.store')}}" method="POST" enctype="multipart/form-data" id="category-form">
                 @csrf
                 <div class="card">
                     <div class="card-body">
@@ -42,6 +42,17 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <input type="hidden" id="image_name" name="image">
+                                    <label for="image">Image</label>
+                                    <div id="image" class="dropzone dz-clickable">
+                                        <div class="dz-message needsclick">
+                                            <br>Drop files here or click to upload.<br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
@@ -62,15 +73,17 @@
                     <a href="{{route('admin.categories.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
+
         </div>
         <!-- /.card -->
     </section>
     <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-{{--     Dynamic Slug Generation--}}
-    <script>
+    <!-- DropZone -->
+    <script src="{{asset('admin-assets/plugins/dropzone/min/dropzone.min.js')}}"></script>
+    <script type="text/javascript">
+        {{--     Dynamic Slug Generation--}}
         document.addEventListener('DOMContentLoaded', function() {
             const titleInput = document.getElementById('name');
             const slugInput = document.getElementById('slug');
@@ -83,6 +96,30 @@
                     .replace(/-+/g, '-')
                     .trim();
                 slugInput.value = slug;
+            });
+        });
+        // Dropzone File Uploader
+        Dropzone.autoDiscover = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropzone = new Dropzone("#image", {
+                init: function() {
+                    this.on('addedfile', function(file) {
+                        if (this.files.length > 1) {
+                            this.removeFile(this.files[0]);
+                        }
+                    });
+                },
+                url: "{{ route('admin.categories.upload') }}",
+                maxFiles: 1,
+                paramName: 'image',
+                addRemoveLinks: true,
+                acceptedFiles: "image/jpeg,image/png,image/gif",
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }, success: function(file, response){
+                    $("#image_name").val(response.image);
+                    //console.log(response)
+                }
             });
         });
     </script>

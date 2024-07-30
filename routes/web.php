@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('admin.login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
@@ -21,6 +23,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
         Route::post('/categories/store', [CategoryController::class, 'store'])->name('admin.categories.store');
+        Route::post('/categories/upload', [CategoryController::class, 'uploadImage'])->name('admin.categories.upload');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('admin.categories.show');
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
