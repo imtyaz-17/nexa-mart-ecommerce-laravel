@@ -12,10 +12,23 @@ class SubCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $subcategories = SubCategory::select('sub_categories.*', 'categories.name as category_name')
+            ->latest('id')
+            ->leftJoin('categories', 'sub_categories.category_id', '=', 'categories.id');
+
+        if (!empty($request->keyword)) {
+            $keyword = $request->keyword;
+            $subcategories = $subcategories->where('sub_categories.name', 'LIKE', "%{$keyword}%")
+                ->orWhere('sub_categories.slug', 'LIKE', "%{$keyword}%");
+        }
+
+        $subcategories = $subcategories->paginate(10);
+
+        return view('admin.sub_category.list', compact('subcategories'));
     }
+
 
     /**
      * Show the form for creating a new resource.
