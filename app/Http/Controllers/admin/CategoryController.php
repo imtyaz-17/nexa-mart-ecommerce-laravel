@@ -125,8 +125,17 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
-    public function destroy(Category $category)
+    public function destroy($categoryId)
     {
+        $category = Category::find($categoryId);
+        if (empty($category)) {
+            return redirect()->route('admin.categories.index')->with('error', 'Category not found.');
+        }
+        //   Delete Old Image
+        File::delete(public_path('/uploads/categoryImage/' . $category->image));
+        File::delete(public_path('/uploads/categoryImage/thumb/' . $category->image));
+        $category->delete();
 
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }
