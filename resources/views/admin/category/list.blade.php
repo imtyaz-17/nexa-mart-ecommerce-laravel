@@ -19,6 +19,7 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
+            @include('message')
             <div class="card">
                 <form action="" method="GET">
                     <div class="card-header">
