@@ -80,6 +80,9 @@
     <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+@endsection
+
+@section('customJs')
     <!-- DropZone -->
     <script src="{{asset('admin-assets/plugins/dropzone/min/dropzone.min.js')}}"></script>
     <script type="text/javascript">
@@ -98,6 +101,7 @@
                 slugInput.value = slug;
             });
         });
+
         // Dropzone File Uploader
         Dropzone.autoDiscover = false;
         document.addEventListener('DOMContentLoaded', function() {
