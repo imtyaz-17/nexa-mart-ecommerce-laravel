@@ -47,11 +47,17 @@ class CategoryController extends Controller
 
             //  Generate Image Thumbnail
             $imagePath = public_path('uploads/categoryImage/' . $category->image);
+            // Check if the 'thumb' directory exists
+            $thumbDirectory = public_path('uploads/categoryImage/thumb');
+            if (!File::exists($thumbDirectory)) {
+                // Create the 'thumb' directory if it doesn't exist
+                File::makeDirectory($thumbDirectory, 0755, true);
+            }
             $thumbnailPath = public_path('uploads/categoryImage/thumb/' . $category->image);
 
             $manager = new ImageManager(new Driver());
             $thumbnail  =  $manager->read($imagePath);
-            $thumbnail->cover(400, 300);
+            $thumbnail->resize(400, 400);
             $thumbnail->save($thumbnailPath);
         }
         $category->save();

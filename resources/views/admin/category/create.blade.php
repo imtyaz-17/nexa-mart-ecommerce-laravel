@@ -113,7 +113,7 @@
                         }
                     });
                 },
-                url: "{{ route('admin.categories.upload') }}",
+                url: "{{ route('image.upload', ['folder' => 'categoryImage']) }}",
                 maxFiles: 1,
                 paramName: 'image',
                 addRemoveLinks: true,

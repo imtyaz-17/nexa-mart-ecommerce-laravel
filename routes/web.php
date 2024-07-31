@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,11 +22,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
+        // Image Upload Route - Dropzone
+        Route::post('/image/upload/{folder}',[ImageUploadController::class, 'uploadImage'])->name('image.upload');
+
         // Category Routes
         Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
         Route::post('/categories/store', [CategoryController::class, 'store'])->name('admin.categories.store');
-        Route::post('/categories/upload', [CategoryController::class, 'uploadImage'])->name('admin.categories.upload');
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.delete');
