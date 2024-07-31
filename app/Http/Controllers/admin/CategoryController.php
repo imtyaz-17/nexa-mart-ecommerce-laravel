@@ -64,21 +64,6 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
-    public function uploadImage(Request $request)
-    {
-        $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $image_name = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/categoryImage'), $image_name);
-
-            return response()->json(['image' => $image_name]);
-        }
-        return response()->json(['error' => 'No file uploaded'], 400);
-    }
     public function show(Category $category)
     {
 
@@ -115,12 +100,18 @@ class CategoryController extends Controller
             $category->image = $request->image;
 
             //  Generate Image Thumbnail
-            $imagePath = public_path('uploads/categoryImage/' .$category->image);
+            $imagePath = public_path('uploads/categoryImage/' . $category->image);
+            // Check if the 'thumb' directory exists
+            $thumbDirectory = public_path('uploads/categoryImage/thumb');
+            if (!File::exists($thumbDirectory)) {
+                // Create the 'thumb' directory if it doesn't exist
+                File::makeDirectory($thumbDirectory, 0755, true);
+            }
             $thumbnailPath = public_path('uploads/categoryImage/thumb/' .$category->image);
 
             $manager = new ImageManager(new Driver());
             $thumbnail  =  $manager->read($imagePath);
-            $thumbnail->cover(400, 300);
+            $thumbnail->resize(400, 300);
             $thumbnail->save($thumbnailPath);
 
             //   Delete Old Image
