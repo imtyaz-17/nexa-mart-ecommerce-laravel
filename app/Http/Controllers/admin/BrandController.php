@@ -12,9 +12,16 @@ use Intervention\Image\ImageManager;
 class BrandController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-
+        $brands = Brand::latest('id');
+        if (!empty($request->keyword)) {
+            $keyword = $request->keyword;
+            $brands = $brands->where('name', 'LIKE', "%{$keyword}%")
+                ->orWhere('slug', 'LIKE', "%{$keyword}%");
+        }
+        $brands = $brands->paginate(10);
+        return view('admin.brands.list', compact('brands'));
     }
     public function create()
     {
