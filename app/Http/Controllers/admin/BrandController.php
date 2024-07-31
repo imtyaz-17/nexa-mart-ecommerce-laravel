@@ -31,7 +31,7 @@ class BrandController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|unique:categories|string|max:255',
+            'slug' => 'required|unique:brands|string|max:255',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
         ]);
@@ -85,7 +85,7 @@ class BrandController extends Controller
         }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|unique:categories|string|max:255',
+            'slug' => 'required|unique:brands,slug,'.$brand->id.'|string|max:255',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
         ]);
@@ -120,8 +120,19 @@ class BrandController extends Controller
         $brand->save();
         return redirect()->route('admin.brands.index')->with('success', 'Brand has been updated');
     }
-    public function destroy(Brand $brand)
+    public function destroy($brandId)
     {
+        $brand = Brand::find($brandId);
+        if (empty($brand)) {
+            return redirect()->route('admin.brands.index')
+                ->with('error', 'Brand not found.');
+        }
 
+        $brand->delete();
+        //   Delete Old Image
+        File::delete(public_path('/uploads/brandImage/' . $brand->image));
+        File::delete(public_path('/uploads/brandImage/thumb/' . $brand->image));
+
+        return redirect()->route('admin.brands.index')->with('success', 'Brand has been deleted');
     }
 }
