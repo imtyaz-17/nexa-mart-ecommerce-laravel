@@ -67,13 +67,58 @@ class BrandController extends Controller
     {
 
     }
-    public function edit(Brand $brand)
+    public function edit($brandId)
     {
-
+        $brand = Brand::find($brandId);
+        if (empty($brand)) {
+            return redirect()->route('admin.brands.index')
+                ->with('error', 'Brand not found.');
+        }
+        return view('admin.brands.edit', compact('brand'));
     }
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, $brandId)
     {
+        $brand = Brand::find($brandId);
+        if (empty($brand)) {
+            return redirect()->route('admin.brands.index')
+                ->with('error', 'Brand not found.');
+        }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|unique:categories|string|max:255',
+            'status' => 'required|boolean',
+            'image' => 'nullable|string',
+        ]);
 
+        $brand->name = $validated['name'];
+        $brand->slug = $validated['slug'];
+        $brand->status = $validated['status'];
+        $oldImage = $brand->image;
+
+        if (!empty($request->image)){
+            $brand->image = $request->image;
+
+            //  Generate Image Thumbnail
+            $imagePath = public_path('uploads/brandImage/' . $brand->image);
+            // Check if the 'thumb' directory exists
+            $thumbDirectory = public_path('uploads/brandImage/thumb');
+            if (!File::exists($thumbDirectory)) {
+                // Create the 'thumb' directory if it doesn't exist
+                File::makeDirectory($thumbDirectory, 0755, true);
+            }
+            $thumbnailPath = public_path('uploads/brandImage/thumb/' . $brand->image);
+
+            $manager = new ImageManager(new Driver());
+            $thumbnail  =  $manager->read($imagePath);
+            $thumbnail->resize(300, 300);
+            $thumbnail->save($thumbnailPath);
+
+            //   Delete Old Image
+            File::delete(public_path('/uploads/brandImage/' . $oldImage));
+            File::delete(public_path('/uploads/brandImage/thumb/' . $oldImage));
+        }
+        $brand->save();
+        return redirect()->route('admin.brands.index')->with('success', 'Brand has been updated');
     }
     public function destroy(Brand $brand)
     {
