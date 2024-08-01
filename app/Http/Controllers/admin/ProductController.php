@@ -15,9 +15,16 @@ use Intervention\Image\ImageManager;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-
+        $products = Product::latest('id')->with('productImages');
+        if (!empty($request->keyword)) {
+            $keyword = $request->keyword;
+            $products = $products->where('title', 'LIKE', "%{$keyword}%")
+                ->orWhere('slug', 'LIKE', "%{$keyword}%");
+        }
+        $products = $products->paginate(10);
+        return view('admin.products.list', compact('products'));
     }
     public function create()
     {
