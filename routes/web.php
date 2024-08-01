@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\ProfileController;
@@ -48,6 +49,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/brands/{brand}/edit',[BrandController::class, 'edit'])->name('admin.brands.edit');
         Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('admin.brands.update');
         Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('admin.brands.delete');
+
+        // Product Routes
+        Route::get('/products',[ProductController::class, 'index'])->name('admin.products.index');
+        Route::get('/products/create',[ProductController::class, 'create'])->name('admin.products.create');
+        Route::get('/product-subcategories/{categoryId}',[ProductController::class, 'productSubcategories']);
+        Route::post('/products/store',[ProductController::class, 'store'])->name('admin.products.store');
+        Route::get('/products/{product}/edit',[ProductController::class, 'edit'])->name('admin.products.edit');
+        Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.delete');
    });
 });
 
