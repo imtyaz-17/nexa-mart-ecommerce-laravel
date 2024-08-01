@@ -14,7 +14,7 @@ class ImageUploadController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image_name = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
 
             // Dynamic folder path
             $image->move(public_path("uploads/{$folder}"), $image_name);
