@@ -186,8 +186,22 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
 
     }
-    public function destroy(Product $product)
+    public function destroy($productId)
     {
+        $product = Product::find($productId);
+        if (empty($product)) {
+            return redirect()->route('admin.products.index')->with('error', 'Product not found.');
+        }
+        $productImages = ProductImage::where('product_id', $productId)->get();
+        if (!empty($productImages)) {
+            foreach ($productImages as $productImage) {
+                File::delete(public_path('/uploads/productImage/' . $productImage->image));
+                File::delete(public_path('/uploads/productImage/thumb/' . $productImage->image));
+            }
+            ProductImage::where('product_id', $productId)->delete();
+        }
+        $product->delete();
 
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 }
