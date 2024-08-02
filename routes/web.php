@@ -25,6 +25,8 @@ Route::prefix('admin')->group(function () {
 
         // Image Upload Route - Dropzone
         Route::post('/image/upload/{folder}',[ImageUploadController::class, 'uploadImage'])->name('image.upload');
+        // Delete Upload Image Route
+        Route::delete('/image/delete/{image}',[ImageUploadController::class, 'deleteImage'])->name('image.delete');
 
         // Category Routes
         Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
