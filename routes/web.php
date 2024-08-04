@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/shop',[ShopController::class,'index'])->name('shop');
 
 
 Route::prefix('admin')->group(function () {
