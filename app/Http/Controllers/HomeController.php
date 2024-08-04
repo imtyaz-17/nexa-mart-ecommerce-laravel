@@ -13,7 +13,6 @@ class HomeController extends Controller
     {
         $categories = Category::where('status', 1)
             ->with('subcategories')
-            ->orderBy('id', 'DESC')
             ->orderBy('name', 'ASC')->get();
         $featureProducts = Product::where('is_featured', true)->orderBy('id', 'DESC')->where('status', 1)->get();
         $latestProducts = Product::orderBy('id', 'DESC')->where('status', 1)->take(8)->get();
