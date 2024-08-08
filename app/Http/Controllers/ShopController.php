@@ -21,7 +21,7 @@ class ShopController extends Controller
             ->with('subcategories')
             ->get();
         $brands = Brand::orderBy('name', 'ASC')->where('status', 1)->get();
-        $products = Product::where('status', 1)->get();
+        $products = Product::where('status', 1);
 
         //Apply Filters
         if (!empty($categorySlug)) {
@@ -58,22 +58,23 @@ class ShopController extends Controller
         {
             if ($sortBy== 'latest')
             {
-                $products = $products->sortByDesc('created_at');
+                $products = $products->orderBy('created_at', 'desc');
             }
             elseif ($sortBy == 'price_asc')
             {
-                $products = $products->sortBy('price');
+                $products = $products->orderBy('price', 'asc');
             }
             else
             {
-                $products = $products->sortByDesc('price');
+                $products = $products->orderBy('price', 'desc');
             }
         }
         else
         {
-            $products = $products->sortByDesc('created_at');
+            $products = $products->orderBy('created_at', 'desc');
         }
 
+        $products = $products->paginate(6);
         return view('front.shop', compact('categories', 'brands', 'products', 'categorySelected', 'subcategorySelected', 'brandsArray', 'priceMax', 'priceMin', 'sortBy'));
     }
 }
