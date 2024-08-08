@@ -61,7 +61,11 @@ class ProductController extends Controller
         $product = new Product();
         $product->title =$validated['title'];
         $product->slug=$validated['slug'];
+        $product->short_description=$validated['short_description'];
+        $product->short_description=$validated['short_description'];
         $product->description=$validated['description'];
+        $product->shipping_returns=$validated['shipping_returns'];
+        $product->shipping_returns=$validated['shipping_returns'];
         $product->price=$validated['price'];
         $product->compare_price=$validated['compare_price'];
         $product->sku=$validated['sku'];
@@ -129,7 +133,9 @@ class ProductController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug,'.$product->id.',id',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
+            'shipping_returns' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'compare_price' => 'nullable|numeric|min:0|gt:price',
             'category' => 'required|exists:categories,id',
@@ -146,7 +152,9 @@ class ProductController extends Controller
 
         $product->title =$validated['title'];
         $product->slug=$validated['slug'];
+        $product->short_description=$validated['short_description'];
         $product->description=$validated['description'];
+        $product->shipping_returns=$validated['shipping_returns'];
         $product->price=$validated['price'];
         $product->compare_price=$validated['compare_price'];
         $product->sku=$validated['sku'];

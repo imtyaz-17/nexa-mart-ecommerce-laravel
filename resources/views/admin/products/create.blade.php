@@ -51,12 +51,36 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                            <label for="short_description">Short Description</label>
+                                            <textarea name="short_description" id="short_description"
+                                                      cols="30" rows="10"
+                                                      class="summernote @error('short_description') is-invalid @enderror"
+                                                      placeholder="Short Description">{{old('short_description')}}</textarea>
+                                            @error('short_description')
+                                            <p class="invalid-feedback">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
                                             <label for="description">Description</label>
                                             <textarea name="description" id="description"
                                                       cols="30" rows="10"
                                                       class="summernote @error('description') is-invalid @enderror"
                                                       placeholder="Description">{{old('description')}}</textarea>
                                             @error('description')
+                                            <p class="invalid-feedback">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="description">Shipping & Returns</label>
+                                            <textarea name="shipping_returns" id="shipping_returns"
+                                                      cols="30" rows="10"
+                                                      class="summernote @error('shipping_returns') is-invalid @enderror"
+                                                      placeholder="Shipping & Returns">{{old('shipping_returns')}}</textarea>
+                                            @error('shipping_returns')
                                             <p class="invalid-feedback">{{$message}}</p>
                                             @enderror
                                         </div>
