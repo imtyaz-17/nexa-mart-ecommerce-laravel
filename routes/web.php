@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/',[HomeController::class,'index'])->name('home');
-Route::get('/shop',[ShopController::class,'index'])->name('shop');
+Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('shop');
 
 
 Route::prefix('admin')->group(function () {

@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-assets/css/slick.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-assets/css/slick-theme.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-assets/css/video-js.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('frontend-assets/css/ion.rangeSlider.min.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-assets/css/style.css')}}"/>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -179,6 +180,7 @@
 <script src="{{asset('frontend-assets/js/instantpages.5.1.0.min.js')}}"></script>
 <script src="{{asset('frontend-assets/js/lazyload.17.6.0.min.js')}}"></script>
 <script src="{{asset('frontend-assets/js/slick.min.js')}}"></script>
+<script src="{{asset('frontend-assets/js/ion.rangeSlider.min.js')}}"></script>
 <script src="{{asset('frontend-assets/js/custom.js')}}"></script>
 <script>
     window.onscroll = function () {
@@ -196,5 +198,6 @@
         }
     }
 </script>
+@yield('customJs')
 </body>
 </html>
