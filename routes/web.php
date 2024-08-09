@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[HomeController::class,'index'])->name('home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('shop');
+Route::get('/product/{slug?}',[ShopController::class,'product'])->name('product');
 
 
 Route::prefix('admin')->group(function () {

@@ -148,7 +148,7 @@
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
-                                <a href="" class="product-img">
+                                <a href="{{route('product', $featureProduct->slug)}}" class="product-img">
                                     @if(!empty($featureProductImage->image))
                                         <img class="card-img-top"
                                              src="{{asset('uploads/productImage/'.$featureProductImage->image)}}"
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-center mt-3">
-                                <a class="h6 link" href="product.php">{{$featureProduct->title}}</a>
+                                <a class="h6 link" href="{{route('product', $featureProduct->slug)}}">{{$featureProduct->title}}</a>
                                 <div class="price mt-2">
                                     <span class="h5"><strong>${{$featureProduct->price}}</strong></span>
                                     @if($featureProduct->compare_price>0)
@@ -193,12 +193,15 @@
             @if($latestProducts->isNotEmpty())
                 @foreach($latestProducts as $latestProduct)
                     @php
+//                    dd($latestProduct);
                         $latestProductImage = $latestProduct->productImages->first();
+//                    dd($latestProductImage);
+
                     @endphp
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
-                                <a href="" class="product-img">
+                                <a href="{{route('product', $latestProduct->slug)}}" class="product-img">
                                     @if(!empty($latestProductImage->image))
                                         <img class="card-img-top"
                                              src="{{asset('uploads/productImage/'.$latestProductImage->image)}}"
@@ -218,7 +221,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-center mt-3">
-                                <a class="h6 link" href="product.php">{{$latestProduct->title}}</a>
+                                <a class="h6 link" href="{{route('product', $latestProduct->slug)}}">{{$latestProduct->title}}</a>
                                 <div class="price mt-2">
                                     <span class="h5"><strong>${{$latestProduct->price}}</strong></span>
                                     @if($latestProduct->compare_price>0)

@@ -111,7 +111,6 @@
                             </li>
                         @endforeach
                     @endif
-
                 </ul>
             </div>
             <div class="right-nav py-0">
