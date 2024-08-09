@@ -6,21 +6,24 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Route::get('/',[HomeController::class,'index'])->name('home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('shop');
 Route::get('/product/{slug?}',[ShopController::class,'product'])->name('product');
+Route::get('/cart',[CartController::class,'cart'])->name('cart');
+Route::post('/cart/add/{id}',[CartController::class,'addToCart'])->name('cart.add');
+Route::post('/cart/update',[CartController::class,'updateCart'])->name('cart.update');
+Route::post('/cart/remove',[CartController::class,'removeFromCart'])->name('cart.remove');
 
 
+
+// Admin Routes
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('admin.login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');

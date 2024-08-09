@@ -36,6 +36,16 @@
                     </div>
                 </div>
                 <div class="col-md-7">
+                    @if(session('error'))
+                        <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
+                            <div>
+                                <strong>{{ session('error') }}</strong>
+                            </div>
+                            <a href="{{ route('cart') }}" class="ml-4 d-flex">
+                                 View Cart <i class="fas fa-shopping-cart text-primary pt-1"></i>
+                            </a>
+                        </div>
+                    @endif
                     <div class="bg-light right">
                         <h1>{{$product->title}}</h1>
                         <div class="d-flex mb-3">
@@ -56,11 +66,17 @@
                         <h2 class="price ">${{$product->price}}</h2>
 
                         <p>{!! $product->short_description !!} </p>
-                        <a href="cart.php" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO
-                            CART</a>
+{{--                        <a href="{{route('cart.add', $product->id)}}" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO--}}
+{{--                            CART</a>--}}
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                            </button>
+                        </form>
+
                     </div>
                 </div>
-
                 <div class="col-md-12 mt-5">
                     <div class="bg-light">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -128,7 +144,7 @@
                                     <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        <a class="btn btn-dark" href="#">
+                                        <a class="btn btn-dark" href="{{route('cart.add', $relatedProduct->id)}}">
                                             <i class="fa fa-shopping-cart"></i> Add To Cart
                                         </a>
                                     </div>

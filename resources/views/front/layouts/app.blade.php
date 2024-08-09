@@ -2,6 +2,7 @@
 <html class="no-js" lang="en_AU"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>NexaMart - Laravel</title>
     <meta name="description" content=""/>
     <meta name="viewport"
@@ -79,8 +80,8 @@
     <div class="container">
         <nav class="navbar navbar-expand-xl" id="navbar">
             <a href="{{route('home')}}" class="text-decoration-none mobile-logo">
-                <span class="h2 text-uppercase text-primary bg-dark">Online</span>
-                <span class="h2 text-uppercase text-white px-2">SHOP</span>
+                <span class="h2 text-uppercase text-primary bg-dark">NEXA</span>
+                <span class="h2 text-uppercase text-white px-2">MART</span>
             </a>
             <button class="navbar-toggler menu-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
