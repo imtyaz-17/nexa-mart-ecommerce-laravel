@@ -82,7 +82,6 @@
                         Register
                     </a>
                 @endauth
-
             </div>
         </div>
     </div>
@@ -104,7 +103,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="index.php" title="Products">Home</a>
+                          <a class="nav-link active" aria-current="page" href="{{route('home')}}" title="Home">Home</a>
                     </li> -->
                     @if($categories->isNotEmpty())
                         @foreach($categories->take(6) as $category)
@@ -128,8 +127,8 @@
                 </ul>
             </div>
             <div class="right-nav py-0">
-                <a href="cart.php" class="ml-3 d-flex pt-2">
-                    <i class="fas fa-shopping-cart text-primary"></i>
+                <a href="{{route('cart')}}" class="ml-3 d-flex pt-2">
+                    <i class="fas fa-shopping-cart text-primary fs-4"></i>
                 </a>
             </div>
         </nav>
