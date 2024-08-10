@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,17 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+    public function index(Request $request): View
+    {
+        $categories = Category::where('status', 1)
+            ->with('subcategories')
+            ->orderBy('name', 'ASC')->get();
+
+        return view('profile.profile', [
+            'user' => $request->user(),
+            'categories' => $categories,
+        ]);
+    }
     public function edit(Request $request): View
     {
         return view('profile.edit', [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $categories = Category::where('status', 1)
+            ->with('subcategories')
+            ->orderBy('name', 'ASC')->get();
+        return view('auth.login', compact('categories'));
     }
 
     /**
@@ -27,8 +31,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        session()->flash('success', 'You are now logged in');
+        return redirect()->intended(route('profile', absolute: false));
     }
 
     /**
@@ -42,6 +46,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect(route('login'))->with('success', 'You are now logged out');
     }
 }
