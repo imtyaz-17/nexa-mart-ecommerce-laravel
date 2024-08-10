@@ -61,7 +61,6 @@
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
-                <a href="account.php" class="nav-link text-dark">My Account</a>
                 <form action="">
                     <div class="input-group">
                         <input type="text" placeholder="Search For Products" class="form-control"
@@ -71,6 +70,19 @@
 					  	</span>
                     </div>
                 </form>
+                @auth
+                    <a href="{{route('profile')}}" class="nav-link text-dark">
+                        {{auth()->user()->name}}
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="nav-link text-dark">
+                        Log in
+                    </a>
+                    <a href="{{ route('register') }}" class="nav-link text-dark">
+                        Register
+                    </a>
+                @endauth
+
             </div>
         </div>
     </div>
@@ -104,7 +116,8 @@
                                 @if($category->subcategories->isNotEmpty())
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         @foreach($category->subcategories as $subcategory)
-                                            <li><a class="dropdown-item nav-link" href="{{route('shop', [$category->slug, $subcategory->slug])}}">{{$subcategory->name}}</a>
+                                            <li><a class="dropdown-item nav-link"
+                                                   href="{{route('shop', [$category->slug, $subcategory->slug])}}">{{$subcategory->name}}</a>
                                             </li>
                                         @endforeach
                                     </ul>
