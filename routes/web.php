@@ -21,6 +21,10 @@ Route::post('/cart/add/{id}',[CartController::class,'addToCart'])->name('cart.ad
 Route::post('/cart/update',[CartController::class,'updateCart'])->name('cart.update');
 Route::post('/cart/remove',[CartController::class,'removeFromCart'])->name('cart.remove');
 
+Route::get('/checkout',[CartController::class,'checkout'])->middleware('auth')->name('cart.checkout');
+Route::post('/checkout',[CartController::class,'processCheckout'])->middleware('auth')->name('cart.process-checkout');
+Route::get('/thanks/{orderId}',[CartController::class,'thankYou'])->middleware('auth')->name('thanks');
+
 
 // User Profile Routes
 Route::middleware('auth')->group(function () {
