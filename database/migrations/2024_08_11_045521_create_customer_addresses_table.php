@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('mobile');
-            $table->string('country');
+            $table->foreignIdFor(Country::class)->constrained()->cascadeOnDelete();
             $table->text('address');
             $table->string('apartment')->nullable();
             $table->string('city');

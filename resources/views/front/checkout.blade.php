@@ -27,7 +27,8 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <input type="text" name="first_name" id="first_name" value="{{ old('first_name', $customerAddress->first_name ?? '') }}"
+                                            <input type="text" name="first_name" id="first_name"
+                                                   value="{{ old('first_name', $customerAddress->first_name ?? '') }}"
                                                    class="form-control @error('first_name') is-invalid @enderror"
                                                    placeholder="First Name">
                                             @error('first_name')
@@ -37,7 +38,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name', $customerAddress->last_name ?? '') }}"
+                                            <input type="text" name="last_name" id="last_name"
+                                                   value="{{ old('last_name', $customerAddress->last_name ?? '') }}"
                                                    class="form-control @error('last_name') is-invalid @enderror"
                                                    placeholder="Last Name">
                                             @error('last_name')
@@ -48,7 +50,8 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <input type="text" name="email" id="email" value="{{ old('email', $customerAddress->email ?? '') }}"
+                                            <input type="text" name="email" id="email"
+                                                   value="{{ old('email', $customerAddress->email ?? '') }}"
                                                    class="form-control @error('email') is-invalid @enderror"
                                                    placeholder="Email">
                                             @error('email')
@@ -62,8 +65,15 @@
                                             <select name="country" id="country"
                                                     class="form-control @error('country') is-invalid @enderror">
                                                 <option value="">Select a Country</option>
-                                                <option value="bd" {{($customerAddress->country) == 'bd' ? 'selected' : '' }}>Bangladesh</option>
-                                                <option value="usa" {{ ($customerAddress->country) == 'usa' ? 'selected' : '' }}>USA</option>
+                                                @if($countries->isNotEmpty())
+                                                    )
+                                                    @foreach($countries as $country)
+                                                        <option value="{{ $country->id }}"
+                                                            @selected(!empty($customerAddress) && $customerAddress->country_id == $country->id)>
+                                                            {{ $country->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
                                             </select>
                                             @error('country')
                                             <p class="invalid-feedback">{{$message}}</p>
@@ -83,7 +93,8 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <input type="text" name="apartment" id="apartment" value="{{ old('apartment', $customerAddress->apartment ?? '') }}"
+                                            <input type="text" name="apartment" id="apartment"
+                                                   value="{{ old('apartment', $customerAddress->apartment ?? '') }}"
                                                    class="form-control @error('apartment') is-invalid @enderror"
                                                    placeholder="Apartment, suite, unit, etc. (optional)">
                                             @error('apartment')
@@ -94,7 +105,8 @@
 
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <input type="text" name="city" id="city" value="{{ old('city', $customerAddress->city ?? '') }}"
+                                            <input type="text" name="city" id="city"
+                                                   value="{{ old('city', $customerAddress->city ?? '') }}"
                                                    class="form-control @error('city') is-invalid @enderror"
                                                    placeholder="City">
                                             @error('city')
@@ -105,7 +117,8 @@
 
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <input type="text" name="state" id="state" value="{{ old('state', $customerAddress->state ?? '') }}"
+                                            <input type="text" name="state" id="state"
+                                                   value="{{ old('state', $customerAddress->state ?? '') }}"
                                                    class="form-control @error('state') is-invalid @enderror"
                                                    placeholder="State">
                                             @error('state')
@@ -116,7 +129,8 @@
 
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <input type="text" name="zip" id="zip" value="{{ old('zip', $customerAddress->zip ?? '') }}"
+                                            <input type="text" name="zip" id="zip"
+                                                   value="{{ old('zip', $customerAddress->zip ?? '') }}"
                                                    class="form-control @error('zip') is-invalid @enderror"
                                                    placeholder="Zip">
                                             @error('zip')
@@ -127,7 +141,8 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <input type="text" name="mobile" id="mobile" value="{{ old('mobile', $customerAddress->mobile ?? '') }}"
+                                            <input type="text" name="mobile" id="mobile"
+                                                   value="{{ old('mobile', $customerAddress->mobile ?? '') }}"
                                                    class="form-control @error('mobile') is-invalid @enderror"
                                                    placeholder="Mobile No.">
                                             @error('mobile')

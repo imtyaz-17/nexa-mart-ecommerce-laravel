@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -114,8 +115,9 @@ class CartController extends Controller
         if (Cart::count() == 0) {
             return redirect()->route('cart');
         }
+        $countries=Country::orderBy('name', 'ASC')->get();
         $customerAddress = CustomerAddress::where('user_id', auth()->user()->id)->first();
-        return view('front.checkout', compact('categories', 'customerAddress'));
+        return view('front.checkout', compact('categories','countries', 'customerAddress'));
     }
 
     public function processCheckout(Request $request)
@@ -143,7 +145,7 @@ class CartController extends Controller
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
                 'mobile' => $validated['mobile'],
-                'country' => $validated['country'],
+                'country_id' => $validated['country'],
                 'address' => $validated['address'],
                 'apartment' => $validated['apartment'],
                 'city' => $validated['city'],
