@@ -256,6 +256,7 @@ class CountrySeeder extends Seeder
             array('code' => 'ZR', 'name' => 'Zaire'),
             array('code' => 'ZM', 'name' => 'Zambia'),
             array('code' => 'ZW', 'name' => 'Zimbabwe'),
+            array('code' => 'RT', 'name' => 'Rest of the world'),
         );
 
         DB::table('countries')->insert($countries);

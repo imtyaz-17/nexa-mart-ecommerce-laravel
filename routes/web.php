@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
@@ -80,6 +81,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/products/{product}/edit',[ProductController::class, 'edit'])->name('admin.products.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.delete');
+
+        // Shipping Routes
+        Route::get('/shipping',[ShippingController::class, 'index'])->name('admin.shipping.index');
+        Route::get('/shipping/create',[ShippingController::class, 'create'])->name('admin.shipping.create');
+        Route::post('/shipping/store',[ShippingController::class, 'store'])->name('admin.shipping.store');
+        Route::get('/shipping/{shipping}/edit',[ShippingController::class, 'edit'])->name('admin.shipping.edit');
+        Route::put('/shipping/{shipping}',[ShippingController::class, 'update'])->name('admin.shipping.update');
+        Route::delete('/shipping/{shipping}', [ShippingController::class, 'destroy'])->name('admin.shipping.delete');
+
    });
 });
 
