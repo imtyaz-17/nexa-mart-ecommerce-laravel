@@ -184,12 +184,13 @@
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
-                                    <div class="h6"><strong>$0</strong></div>
+                                    <input type="hidden" name="shipping" id="shipping" value="{{ number_format($shippingCharge, 2) }}">
+                                    <div class="h6"><strong id="shippingCharge">${{number_format($shippingCharge,2)}}</strong></div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2 summery-end">
-                                    <div class="h5"><strong>Total</strong></div>
+                                    <div class="h5"><strong >Total</strong></div>
                                     <div class="h5">
-                                        <strong>$${{\Gloudemans\Shoppingcart\Facades\Cart::subtotal()}}</strong></div>
+                                        <strong id="grandTotal">${{number_format($grandTotal,2)}}</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -237,6 +238,25 @@
 @endsection
 @section('customJs')
     <script type="text/javascript">
+        $("#country").change(function (){
+           $.ajax({
+              url:'{{route("cart.get-order-summery")}}',
+               type:'POST',
+               data:{country_id:$(this).val()},
+               dataType:'json',
+               headers: {
+                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+               },
+               success:function (response){
+                  if(response.status==true){
+                      $("#shippingCharge").html('$'+response.shippingCharge);
+                      $("#grandTotal").html('$'+response.grandTotal);
+                      $("#shipping").val(response.shippingCharge);
+                  }
+               }
+
+           });
+        });
         $("#payment_method_one").click(function () {
             if ($(this).is(":checked") == true) {
                 $("#card-payment-form").addClass('d-none');

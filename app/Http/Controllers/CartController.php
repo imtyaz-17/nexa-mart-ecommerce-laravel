@@ -8,6 +8,7 @@ use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ShippingCharge;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
@@ -109,15 +110,38 @@ class CartController extends Controller
 
     public function checkout()
     {
+        // Get active categories with subcategories
         $categories = Category::where('status', 1)
             ->with('subcategories')
-            ->orderBy('name', 'ASC')->get();
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        // Redirect to cart page if the cart is empty
         if (Cart::count() == 0) {
             return redirect()->route('cart');
         }
-        $countries=Country::orderBy('name', 'ASC')->get();
+
+        // Get all countries for the dropdown
+        $countries = Country::orderBy('name', 'ASC')->get();
+
+        // Get the customer's saved address
         $customerAddress = CustomerAddress::where('user_id', auth()->user()->id)->first();
-        return view('front.checkout', compact('categories','countries', 'customerAddress'));
+
+        // Initialize shipping charge and grand total
+        $shippingCharge = 0;
+        $grandTotal = (float) Cart::subtotal(2, '.', '');
+
+        // Calculate shipping charge and grand total if customer has an address
+        if ($customerAddress) {
+            $shippingInfo = ShippingCharge::where('country_id', $customerAddress->country_id)->first();
+            if ($shippingInfo) {
+                $shippingCharge = (float) $shippingInfo->amount;
+                $grandTotal += $shippingCharge;
+            }
+        }
+
+        // Return the checkout view with the necessary data
+        return view('front.checkout', compact('categories', 'countries', 'customerAddress', 'shippingCharge', 'grandTotal'));
     }
 
     public function processCheckout(Request $request)
@@ -158,7 +182,8 @@ class CartController extends Controller
         // Store data in Order table
         if ($request->payment_method == 'cod') {
             $subtotal = Cart::subtotal(2, '.', '');
-            $shipping = 0;
+
+            $shipping = $request->shipping;
             $discount = 0;
             $grandTotal = $subtotal + $shipping;
 
@@ -183,12 +208,45 @@ class CartController extends Controller
             }
             Cart::destroy();
             return redirect()->route('thanks', $order->id)->with('success', 'Placed your order successfully.');
-        }
-        else {
+        } else {
             return redirect()->route('thanks', 1)->with('success', 'Placed your order successfully.');
         }
     }
-    public  function thankYou($orderId){
+
+    public function getOrderSummary(Request $request)
+    {
+        $subTotal = (float) Cart::subtotal(2, '.', '');
+        $countryId = $request->country_id;
+        if($countryId>0){
+        // Determine the shipping information based on the country_id
+        $shippingInfo = ShippingCharge::where('country_id', $countryId)->first();
+
+        // If no specific country shipping info is found, use "Rest of the World" (id 999)
+        if (!$shippingInfo) {
+            $shippingInfo = ShippingCharge::where('country_id', 999)->first();
+        }
+
+        // Calculate shipping charge and grand total
+        $shippingCharge = (float) $shippingInfo->amount;
+        $grandTotal = $subTotal + $shippingCharge;
+
+        return response()->json([
+            'status' => true,
+            'shippingCharge' => number_format($shippingCharge, 2),
+            'grandTotal' => number_format($grandTotal, 2),
+        ]);
+        }
+        else{
+            return response()->json([
+                'status' => true,
+                'shippingCharge' => 0,
+                'grandTotal' => number_format($subTotal, 2),
+            ]);
+        }
+    }
+
+    public function thankYou($orderId)
+    {
         $categories = Category::where('status', 1)
             ->with('subcategories')
             ->orderBy('name', 'ASC')->get();
