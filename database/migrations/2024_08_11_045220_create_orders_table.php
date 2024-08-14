@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CustomerAddress;
+use App\Models\DiscountCoupon;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(CustomerAddress::class)->constrained()->cascadeOnDelete();
             $table->double('subtotal',10,2)->default(0);
             $table->double('shipping',10,2)->default(0);
-            $table->string('coupon_code')->nullable();
+            $table->foreignIdFor(DiscountCoupon::class)->constrained()->cascadeOnDelete();
             $table->double('discount',10,2)->nullable();
             $table->double('grand_total',10,2)->default(0);
             $table->timestamps();
