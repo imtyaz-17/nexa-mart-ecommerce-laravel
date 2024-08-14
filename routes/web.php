@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\DiscountCouponController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
@@ -90,6 +91,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/shipping/{shipping}/edit',[ShippingController::class, 'edit'])->name('admin.shipping.edit');
         Route::put('/shipping/{shipping}',[ShippingController::class, 'update'])->name('admin.shipping.update');
         Route::delete('/shipping/{shipping}', [ShippingController::class, 'destroy'])->name('admin.shipping.delete');
+
+        // Discount coupon Routes
+        Route::get('/coupons',[DiscountCouponController::class,'index'])->name('admin.coupons.index');
+        Route::get('/coupons/create',[DiscountCouponController::class,'create'])->name('admin.coupons.create');
+        Route::post('/coupons/store',[DiscountCouponController::class,'store'])->name('admin.coupons.store');
+        Route::get('/coupons/{coupon}/edit',[DiscountCouponController::class,'edit'])->name('admin.coupons.edit');
+        Route::put('/coupons/{coupon}',[DiscountCouponController::class,'update'])->name('admin.coupons.update');
+        Route::delete('/coupons/{coupon}',[DiscountCouponController::class,'destroy'])->name('admin.coupons.delete');
 
    });
 });
