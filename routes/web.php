@@ -26,6 +26,8 @@ Route::post('/cart/remove',[CartController::class,'removeFromCart'])->name('cart
 Route::get('/checkout',[CartController::class,'checkout'])->middleware('auth')->name('cart.checkout');
 Route::post('/checkout',[CartController::class,'processCheckout'])->middleware('auth')->name('cart.process-checkout');
 Route::post('/get-order-summery',[CartController::class,'getOrderSummary'])->middleware('auth')->name('cart.get-order-summery');
+Route::post('/apply-discount',[CartController::class,'applyDiscount'])->middleware('auth')->name('cart.apply-discount');
+Route::post('/remove-coupon',[CartController::class,'removeCoupon'])->middleware('auth')->name('cart.remove-coupon');
 Route::get('/thanks/{orderId}',[CartController::class,'thankYou'])->middleware('auth')->name('thanks');
 
 

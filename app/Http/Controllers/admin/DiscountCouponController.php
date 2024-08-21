@@ -62,7 +62,7 @@ class DiscountCouponController extends Controller
     }
 
     public function show(DiscountCoupon $discountCoupon){}
-    public function edit($couponId
+    public function edit($couponId)
     {
         $coupon= DiscountCoupon::find($couponId);
         if (empty($coupon)) {

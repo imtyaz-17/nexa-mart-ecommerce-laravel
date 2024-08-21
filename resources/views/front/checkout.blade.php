@@ -182,19 +182,36 @@
                                     <div class="h6">
                                         <strong>${{\Gloudemans\Shoppingcart\Facades\Cart::subtotal()}}</strong></div>
                                 </div>
+                                <div class="d-flex justify-content-between summery-end">
+                                    <div class="h6"><strong>Discount</strong></div>
+                                    <div class="h6">
+                                        <strong id="discount_field">${{number_format($discount,2)}}</strong></div>
+                                </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
-                                    <input type="hidden" name="shipping" id="shipping" value="{{ number_format($shippingCharge, 2) }}">
-                                    <div class="h6"><strong id="shippingCharge">${{number_format($shippingCharge,2)}}</strong></div>
+                                    <input type="hidden" name="shipping" id="shipping"
+                                           value="{{ number_format($shippingCharge, 2) }}">
+                                    <div class="h6"><strong
+                                            id="shippingCharge">${{number_format($shippingCharge,2)}}</strong></div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2 summery-end">
-                                    <div class="h5"><strong >Total</strong></div>
+                                    <div class="h5"><strong>Total</strong></div>
                                     <div class="h5">
                                         <strong id="grandTotal">${{number_format($grandTotal,2)}}</strong></div>
                                 </div>
                             </div>
                         </div>
-
+                        <div class="input-group apply-coupon mt-4">
+                            <input type="text" name="discount_code" id="discount_code" placeholder="Coupon Code"
+                                   class="form-control">
+                            <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
+                        </div>
+{{--                        @if(Session::has('code'))--}}
+{{--                            <div class="mt-2" id="discount-close">--}}
+{{--                                <strong>{{\Illuminate\Support\Facades\Session::get('code')->code}}</strong>--}}
+{{--                                <a class="btn btn-sm btn-danger" id="remove-discount"><i class="fa fa-times"></i></a>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
                         <div class="card payment-form ">
                             <h3 class="card-title h5 mb-3">Payment Method</h3>
                             <div class="">
@@ -238,25 +255,74 @@
 @endsection
 @section('customJs')
     <script type="text/javascript">
-        $("#country").change(function (){
-           $.ajax({
-              url:'{{route("cart.get-order-summery")}}',
-               type:'POST',
-               data:{country_id:$(this).val()},
-               dataType:'json',
-               headers: {
-                   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-               },
-               success:function (response){
-                  if(response.status==true){
-                      $("#shippingCharge").html('$'+response.shippingCharge);
-                      $("#grandTotal").html('$'+response.grandTotal);
-                      $("#shipping").val(response.shippingCharge);
-                  }
-               }
+        $("#country").change(function () {
+            $.ajax({
+                url: '{{route("cart.get-order-summery")}}',
+                type: 'POST',
+                data: {country_id: $(this).val()},
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                success: function (response) {
+                    if (response.status == true) {
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                        $("#shipping").val(response.shippingCharge);
 
-           });
+                    }
+                }
+
+            });
         });
+        $(document).ready(function () {
+            $("#apply-discount").click(function () {
+                $.ajax({
+                    url: '{{route("cart.apply-discount")}}',
+                    type: 'POST',
+                    data: {code: $("#discount_code").val(), country_id: $("#country").val()},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    success: function (response) {
+                        if (response.status == true) {
+                            $("#shippingCharge").html('$' + response.shippingCharge);
+                            $("#grandTotal").html('$' + response.grandTotal);
+                            $("#shipping").val(response.shippingCharge);
+                            $("#discount_field").html('$' + response.discount);
+                            $("#discount_code").val('');
+
+                            $("#discount-close").removeClass('d-none');
+                        }
+                    }
+
+                });
+            });
+        });
+        {{--$(document).on('click', '#remove-discount', function () {--}}
+        {{--    $.ajax({--}}
+        {{--        url: '{{route("cart.remove-coupon")}}',--}}
+        {{--        type: 'POST',--}}
+        {{--        data: {country_id: $("#country").val()},--}}
+        {{--        dataType: 'json',--}}
+        {{--        headers: {--}}
+        {{--            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')--}}
+        {{--        },--}}
+        {{--        success: function (response) {--}}
+        {{--            if (response.status == true) {--}}
+        {{--                $("#shippingCharge").html('$' + response.shippingCharge);--}}
+        {{--                $("#grandTotal").html('$' + response.grandTotal);--}}
+        {{--                $("#shipping").val(response.shippingCharge);--}}
+        {{--                $("#discount_field").html('$' + response.discount);--}}
+        {{--                $("#discount_code").val('');--}}
+
+        {{--                $("#discount-close").addClass('d-none');--}}
+        {{--            }--}}
+        {{--        }--}}
+
+        {{--    });--}}
+        {{--});--}}
         $("#payment_method_one").click(function () {
             if ($(this).is(":checked") == true) {
                 $("#card-payment-form").addClass('d-none');
