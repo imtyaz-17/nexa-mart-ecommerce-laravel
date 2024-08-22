@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
 //        ]);
 
 //        Category::factory(30)->create();
+
+        $this->call(CountrySeeder::class);
     }
 }
