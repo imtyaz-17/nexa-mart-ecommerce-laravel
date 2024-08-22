@@ -253,7 +253,7 @@ class CartController extends Controller
 
             // If no specific country shipping info is found, use "Rest of the World" (id 999)
             if (!$shippingInfo) {
-                $shippingInfo = ShippingCharge::where('country_id', 999)->first();
+                $shippingInfo = ShippingCharge::where('code', 'RT')->first();
             }
             // Calculate shipping charge
             $shippingCharge = (float)$shippingInfo->amount;
