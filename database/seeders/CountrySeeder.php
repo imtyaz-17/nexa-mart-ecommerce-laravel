@@ -14,8 +14,6 @@ class CountrySeeder extends Seeder
     public function run(): void
     {
         $countries = array(
-            array('code' => 'US', 'name' => 'United States'),
-            array('code' => 'CA', 'name' => 'Canada'),
             array('code' => 'AF', 'name' => 'Afghanistan'),
             array('code' => 'AL', 'name' => 'Albania'),
             array('code' => 'DZ', 'name' => 'Algeria'),
@@ -53,6 +51,7 @@ class CountrySeeder extends Seeder
             array('code' => 'BI', 'name' => 'Burundi'),
             array('code' => 'KH', 'name' => 'Cambodia'),
             array('code' => 'CM', 'name' => 'Cameroon'),
+            array('code' => 'CA', 'name' => 'Canada'),
             array('code' => 'CV', 'name' => 'Cape Verde'),
             array('code' => 'KY', 'name' => 'Cayman Islands'),
             array('code' => 'CF', 'name' => 'Central African Republic'),
@@ -240,6 +239,7 @@ class CountrySeeder extends Seeder
             array('code' => 'UA', 'name' => 'Ukraine'),
             array('code' => 'AE', 'name' => 'United Arab Emirates'),
             array('code' => 'GB', 'name' => 'United Kingdom'),
+            array('code' => 'US', 'name' => 'United States'),
             array('code' => 'UM', 'name' => 'United States minor outlying islands'),
             array('code' => 'UY', 'name' => 'Uruguay'),
             array('code' => 'UZ', 'name' => 'Uzbekistan'),
@@ -256,9 +256,13 @@ class CountrySeeder extends Seeder
             array('code' => 'ZR', 'name' => 'Zaire'),
             array('code' => 'ZM', 'name' => 'Zambia'),
             array('code' => 'ZW', 'name' => 'Zimbabwe'),
-            array('code' => 'RT', 'name' => 'Rest of the world'),
         );
 
         DB::table('countries')->insert($countries);
+        DB::table('countries')->insert([
+            'id' => 99991,
+            'code'=>'RT',
+            'name' => 'Rest of the World'
+        ]);
     }
 }

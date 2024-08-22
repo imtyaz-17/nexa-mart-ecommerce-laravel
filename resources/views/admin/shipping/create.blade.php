@@ -39,7 +39,6 @@
                                                     {{$country->name}}
                                                 </option>
                                             @endforeach
-{{--                                            <option value="999">Rest of the world.</option>--}}
                                         @endif
                                     </select>
                                     @error('country')
