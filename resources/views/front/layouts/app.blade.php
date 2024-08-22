@@ -143,10 +143,12 @@
             <div class="col-md-4">
                 <div class="footer-card">
                     <h3>Get In Touch</h3>
-                    <p>No dolore ipsum accusam no lorem. <br>
-                        123 Street, New York, USA <br>
-                        exampl@example.com <br>
-                        000 000 0000</p>
+                    <p>
+                         Reach out at: <br>
+                        Dhaka, Bangladesh <br>
+                        <a href="mailto:imtyazit17017@gmail.com">imtyazit17017@gmail.com</a> <br>
+                        <a href="tel:+8801315781010">+880 1315-781010</a>
+                    </p>
                 </div>
             </div>
 
