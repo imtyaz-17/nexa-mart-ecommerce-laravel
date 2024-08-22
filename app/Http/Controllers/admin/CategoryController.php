@@ -57,7 +57,7 @@ class CategoryController extends Controller
 
             $manager = new ImageManager(new Driver());
             $thumbnail  =  $manager->read($imagePath);
-            $thumbnail->resize(400, 400);
+            $thumbnail->resize(300, 300);
             $thumbnail->save($thumbnailPath);
         }
         $category->save();
@@ -111,7 +111,7 @@ class CategoryController extends Controller
 
             $manager = new ImageManager(new Driver());
             $thumbnail  =  $manager->read($imagePath);
-            $thumbnail->resize(400, 300);
+            $thumbnail->resize(300, 300);
             $thumbnail->save($thumbnailPath);
 
             //   Delete Old Image
