@@ -188,7 +188,7 @@ class CartController extends Controller
 
             $shipping = $request->shipping;
             $discount = 0;
-            $discount_coupon_id='';
+            $discount_coupon_id=null;
             // Calculate Discount
             if (session()->has('code')) {
                 $code = session()->get('code');

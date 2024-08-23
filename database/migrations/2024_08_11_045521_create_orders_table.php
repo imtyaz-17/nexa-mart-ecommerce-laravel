@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(CustomerAddress::class)->constrained()->cascadeOnDelete();
             $table->double('subtotal',10,2)->default(0);
             $table->double('shipping',10,2)->default(0);
-            $table->foreignIdFor(DiscountCoupon::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(DiscountCoupon::class)->nullable()->constrained()->cascadeOnDelete();
             $table->double('discount',10,2)->nullable();
             $table->double('grand_total',10,2)->default(0);
             $table->timestamps();
