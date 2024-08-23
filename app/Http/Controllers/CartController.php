@@ -203,11 +203,11 @@ class CartController extends Controller
             $grandTotal = ($subtotal-$discount) + $shipping;
 
             $order = new Order;
+            $order->customer_address_id = $customer_address->id;
             $order->subtotal = $subtotal;
             $order->shipping = $shipping;
             $order->discount = $discount;
             $order->grand_total = $grandTotal;
-            $order->customer_address_id = $customer_address->id;
             $order->user_id = $user->id;
             $order->discount_coupon_id = $discount_coupon_id;
             $order->save();
@@ -251,7 +251,7 @@ class CartController extends Controller
             // Determine the shipping information based on the country_id
             $shippingInfo = ShippingCharge::where('country_id', $countryId)->first();
 
-            // If no specific country shipping info is found, use "Rest of the World" (id 999)
+            // If no specific country shipping info is found, use "Rest of the World" (id 99991)
             if (!$shippingInfo) {
                 $shippingInfo = ShippingCharge::where('country_id', 99991)->first();
             }
