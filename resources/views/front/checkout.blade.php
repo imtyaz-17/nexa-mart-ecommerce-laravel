@@ -206,12 +206,16 @@
                                    class="form-control">
                             <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
                         </div>
-{{--                        @if(Session::has('code'))--}}
-{{--                            <div class="mt-2" id="discount-close">--}}
-{{--                                <strong>{{\Illuminate\Support\Facades\Session::get('code')->code}}</strong>--}}
-{{--                                <a class="btn btn-sm btn-danger" id="remove-discount"><i class="fa fa-times"></i></a>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
+                        <div id="coupon-close-wrapper">
+                            @if(Session::has('code'))
+                                <div class="mt-2" id="coupon-close">
+                                    <strong>{{\Illuminate\Support\Facades\Session::get('code')->code}}</strong>
+                                    <a class="btn btn-sm btn-danger" id="remove-discount"><i
+                                            class="fa fa-times"></i></a>
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="card payment-form ">
                             <h3 class="card-title h5 mb-3">Payment Method</h3>
                             <div class="">
@@ -275,54 +279,52 @@
 
             });
         });
-        $(document).ready(function () {
-            $("#apply-discount").click(function () {
-                $.ajax({
-                    url: '{{route("cart.apply-discount")}}',
-                    type: 'POST',
-                    data: {code: $("#discount_code").val(), country_id: $("#country").val()},
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    success: function (response) {
-                        if (response.status == true) {
-                            $("#shippingCharge").html('$' + response.shippingCharge);
-                            $("#grandTotal").html('$' + response.grandTotal);
-                            $("#shipping").val(response.shippingCharge);
-                            $("#discount_field").html('$' + response.discount);
-                            $("#discount_code").val('');
+        $("#apply-discount").click(function () {
+            $.ajax({
+                url: '{{route("cart.apply-discount")}}',
+                type: 'POST',
+                data: {code: $("#discount_code").val(), country_id: $("#country").val()},
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                success: function (response) {
+                    if (response.status == true) {
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                        $("#shipping").val(response.shippingCharge);
+                        $("#discount_field").html('$' + response.discount);
+                        $("#discount_code").val('');
 
-                            $("#discount-close").removeClass('d-none');
-                        }
+                        $("#coupon-close-wrapper").html(response.discountString);
                     }
-
-                });
+                    else{
+                        $("#coupon-close-wrapper").html("<span class='text-danger'>"+response.error+"</span>");
+                    }
+                }
             });
         });
-        {{--$(document).on('click', '#remove-discount', function () {--}}
-        {{--    $.ajax({--}}
-        {{--        url: '{{route("cart.remove-coupon")}}',--}}
-        {{--        type: 'POST',--}}
-        {{--        data: {country_id: $("#country").val()},--}}
-        {{--        dataType: 'json',--}}
-        {{--        headers: {--}}
-        {{--            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')--}}
-        {{--        },--}}
-        {{--        success: function (response) {--}}
-        {{--            if (response.status == true) {--}}
-        {{--                $("#shippingCharge").html('$' + response.shippingCharge);--}}
-        {{--                $("#grandTotal").html('$' + response.grandTotal);--}}
-        {{--                $("#shipping").val(response.shippingCharge);--}}
-        {{--                $("#discount_field").html('$' + response.discount);--}}
-        {{--                $("#discount_code").val('');--}}
+        $('body').on('click',"#remove-discount",function () {
+            $.ajax({
+                url: '{{route("cart.remove-coupon")}}',
+                type: 'POST',
+                data: {country_id: $("#country").val()},
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                success: function (response) {
+                    if (response.status == true) {
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                        $("#shipping").val(response.shippingCharge);
+                        $("#discount_field").html('$' + response.discount);
 
-        {{--                $("#discount-close").addClass('d-none');--}}
-        {{--            }--}}
-        {{--        }--}}
-
-        {{--    });--}}
-        {{--});--}}
+                        $("#coupon-close").html('');
+                    }
+                }
+            });
+        });
         $("#payment_method_one").click(function () {
             if ($(this).is(":checked") == true) {
                 $("#card-payment-form").addClass('d-none');
