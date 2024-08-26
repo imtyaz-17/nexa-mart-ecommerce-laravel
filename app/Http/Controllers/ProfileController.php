@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\ProductImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,5 +71,24 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function myOrders()
+    {
+        $categories = Category::where('status', 1)
+            ->with('subcategories')
+            ->orderBy('name', 'ASC')->get();
+
+        $user=auth()->user();
+        $orders=Order::where('user_id', $user->id)->orderBy('created_at', 'DESC')->get();
+        return view('profile.my-orders',compact('categories','orders'));
+    }
+    public function myOrderDetails(Request $request, Order $order)
+    {
+        $categories = Category::where('status', 1)
+            ->with('subcategories')
+            ->orderBy('name', 'ASC')->get();
+        $order->load('orderItems');
+        return view('profile.order-details',compact('categories','order'));
     }
 }

@@ -210,6 +210,8 @@ class CartController extends Controller
             $order->grand_total = $grandTotal;
             $order->user_id = $user->id;
             $order->discount_coupon_id = $discount_coupon_id;
+            $order->payment_status = 'unpaid';
+            $order->delivery_status = 'pending';
             $order->save();
 
             //Store shopping items in Order items table
@@ -220,7 +222,7 @@ class CartController extends Controller
                 $orderItem->name = $item->name;
                 $orderItem->qty = $item->qty;
                 $orderItem->price = $item->price;
-                $orderItem->total = $item->total * $item->qty;
+                $orderItem->total = $item->price * $item->qty;
                 $orderItem->save();
             }
             Cart::destroy();

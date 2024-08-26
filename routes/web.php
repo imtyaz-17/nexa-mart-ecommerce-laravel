@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/orders', [ProfileController::class, 'myOrders'])->name('profile.orders');
+    Route::get('/orders/{order}', [ProfileController::class, 'myOrderDetails'])->name('profile.order-details');
 });
 
 // Admin Routes
