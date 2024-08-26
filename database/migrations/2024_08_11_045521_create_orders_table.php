@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreignIdFor(DiscountCoupon::class)->nullable()->constrained()->cascadeOnDelete();
             $table->double('discount',10,2)->nullable();
             $table->double('grand_total',10,2)->default(0);
+            $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
+            $table->enum('delivery_status',['pending','Shipped','delivered'])->default('pending');
             $table->timestamps();
         });
     }
