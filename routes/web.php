@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DiscountCouponController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
@@ -104,6 +105,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/coupons/{coupon}/edit',[DiscountCouponController::class,'edit'])->name('admin.coupons.edit');
         Route::put('/coupons/{coupon}',[DiscountCouponController::class,'update'])->name('admin.coupons.update');
         Route::delete('/coupons/{coupon}',[DiscountCouponController::class,'destroy'])->name('admin.coupons.delete');
+
+        //Orders Routes
+        Route::get('/orders',[OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/orders/{order}',[OrderController::class, 'orderDetail'])->name('admin.orders.detail');
+        Route::post('/orders/change-status/{order}',[OrderController::class, 'changeOrderStatus'])->name('admin.orders.change-status');
 
    });
 });
