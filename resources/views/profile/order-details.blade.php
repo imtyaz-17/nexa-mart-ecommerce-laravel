@@ -24,7 +24,6 @@
                             <div class="card-header">
                                 <h2 class="h5 mb-0 pt-2 pb-2">My Orders</h2>
                             </div>
-                            {{--                            @if($order->isNotEmpty()) @endif--}}
                             <div class="card-body pb-0">
                                 <!-- Info -->
                                 <div class="card card-sm">
@@ -44,7 +43,11 @@
                                                 <!-- Text -->
                                                 <p class="mb-lg-0 fs-sm fw-bold">
                                                     <time datetime="2019-10-01">
-                                                        01 Oct, 2019
+                                                        @if(!empty($order->shipped_date))
+                                                            {{\Carbon\Carbon::parse($order->shipped_date)->format('d M, Y')}}
+                                                        @else
+                                                            N/A
+                                                        @endif
                                                     </time>
                                                 </p>
                                             </div>
@@ -54,11 +57,13 @@
                                                 <!-- Text -->
                                                 <p class="mb-0 fs-sm fw-bold">
                                                     @if($order->delivery_status=='pending')
-                                                        <span class="badge bg-danger">Pending</span>
+                                                        <span class="badge bg-warning">Pending</span>
                                                     @elseif($order->delivery_status=='shipped')
                                                         <span class="badge bg-info">Shipped</span>
-                                                    @else
+                                                    @elseif($order->delivery_status == 'delivered')
                                                         <span class="badge bg-success">Delivered</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Cancelled</span>
                                                     @endif
                                                 </p>
                                             </div>
@@ -78,7 +83,7 @@
                             <div class="card-footer p-3">
 
                                 <!-- Heading -->
-                                <h6 class="mb-7 h5 mt-4">Order Items (3)</h6>
+                                <h6 class="mb-7 h5 mt-4">Order Items ({{$orderItemsCount}})</h6>
 
                                 <!-- Divider -->
                                 <hr class="my-3">

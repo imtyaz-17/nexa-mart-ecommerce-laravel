@@ -89,6 +89,7 @@ class ProfileController extends Controller
             ->with('subcategories')
             ->orderBy('name', 'ASC')->get();
         $order->load('orderItems');
-        return view('profile.order-details',compact('categories','order'));
+        $orderItemsCount = $order->orderItems()->count();
+        return view('profile.order-details',compact('categories','order','orderItemsCount'));
     }
 }
