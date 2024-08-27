@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('grand_total',10,2)->default(0);
             $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
             $table->enum('delivery_status',['pending','shipped','delivered','canceled'])->default('pending');
+            $table-> timestamp('shipped_date')->nullable();
             $table->timestamps();
         });
     }
