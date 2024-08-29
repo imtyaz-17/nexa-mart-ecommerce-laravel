@@ -24,12 +24,19 @@
 </head>
 <body>
 <div class="email-container">
-    <h1 class="text-primary">Thank You for Your Order!</h1>
-    <div class="email-content">
-        <h2>Order Confirmation - Order #{{$mailData['order']->id}}</h2>
-        {{--        <p>Dear {{$mailData['order']->customer_name}},</p>--}}
-        <p>We are pleased to confirm your order. Below are the details of your purchase:</p>
-    </div>
+    @if($mailData['userType']=='customer')
+        <h1 class="text-primary text-center">Thank You for Your Order!</h1>
+        <div class="email-content">
+            <h2>Order Confirmation - Order #{{$mailData['order']->id}}</h2>
+            {{--        <p>Dear {{$mailData['order']->customer_name}},</p>--}}
+            <p>We are pleased to confirm your order. Below are the details of your purchase:</p>
+        </div>
+    @else
+        <h1 class="text-primary text-center">New Order Received!</h1>
+        <div class="email-content">
+            <h2>Order Confirmation - Order #{{$mailData['order']->id}}</h2>
+        </div>
+    @endif
     <div>
         <h2 class="mb-3">Shipping Address</h2>
         <address>

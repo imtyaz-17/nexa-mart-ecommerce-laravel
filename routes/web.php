@@ -113,6 +113,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'orderDetail'])->name('admin.orders.detail');
         Route::post('/orders/change-status/{order}', [OrderController::class, 'changeOrderStatus'])->name('admin.orders.change-status');
+        Route::post('/orders/send-invoice/{order}', [OrderController::class, 'sendInvoiceEmail'])->name('admin.orders.send-invoice-email');
 
     });
 });

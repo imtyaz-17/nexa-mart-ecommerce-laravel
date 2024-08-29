@@ -2,9 +2,10 @@
 
 use App\Mail\OrderEmail;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
-function orderEmail($orderId)
+function orderEmail($orderId, $userType="customer")
 {
     $order = Order::where('orders.id', $orderId)
         ->with('orderItems')
@@ -12,11 +13,18 @@ function orderEmail($orderId)
         ->leftJoin('countries', 'countries.id', '=', 'customer_addresses.country_id')
         ->select('orders.*', 'customer_addresses.*', 'countries.name as country_name')
         ->first();
-
+    if ($userType == "customer") {
+        $subject = 'Thank you for your order';
+        $email= $order->email;
+    }
+    else{
+        $subject = 'New Order Placed';
+        $email= User::where('role', 'admin')->first()->email;
+    }
     $mailData = [
-        'subject' => 'Thank you for your order',
+        'subject' => $subject,
         'order' => $order,
+        'userType' => $userType
     ];
-//    dd($order);
-    Mail::to($order->email)->send(new OrderEmail($mailData));
+    Mail::to($email)->send(new OrderEmail($mailData));
 }

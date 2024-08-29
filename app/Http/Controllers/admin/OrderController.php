@@ -48,4 +48,10 @@ class OrderController extends Controller
 
         return redirect()->route('admin.orders.detail', $order->id)->with('success', 'Order Status Changed Successfully');
     }
+
+    public function sendInvoiceEmail(Request $request, Order $order)
+    {
+        orderEmail($order->id, $request->userType);
+        return redirect()->route('admin.orders.detail', $order->id)->with('success', 'Invoice Email Send Successfully');
+    }
 }

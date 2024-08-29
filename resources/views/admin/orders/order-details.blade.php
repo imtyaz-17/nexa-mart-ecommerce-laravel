@@ -106,7 +106,8 @@
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <form action="{{route('admin.orders.change-status', $order->id)}}" method="POST" name="changeOrderStatusForm" id="changeOrderStatusForm">
+                        <form action="{{route('admin.orders.change-status', $order->id)}}" method="POST"
+                              name="changeOrderStatusForm" id="changeOrderStatusForm" onsubmit="return confirmDeletion();">
                             @csrf
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Order Status</h2>
@@ -132,7 +133,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="shipped_date">Shipped Date</label>
-                                    <input placeholder="Shipped Date" value="{{$order->shipped_date}}" name="shipped_date" id="shipped_date" class="form-control">
+                                    <input placeholder="Shipped Date" value="{{$order->shipped_date}}"
+                                           name="shipped_date" id="shipped_date" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <button class="btn btn-primary">Update</button>
@@ -143,15 +145,18 @@
                     <div class="card">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Send Inovice Email</h2>
-                            <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
-                                    <option value="">Customer</option>
-                                    <option value="">Admin</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary">Send</button>
-                            </div>
+                            <form action="{{route('admin.orders.send-invoice-email',$order->id)}}" method="post" name="sendInvoiceEmail" id="sendInvoiceEmail" onsubmit="return confirmDeletion();">
+                                @csrf
+                                <div class="mb-3">
+                                    <select name="userType" id="userType" class="form-control">
+                                        <option value="customer">Customer</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary">Send</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -170,5 +175,8 @@
                 // Additional options can go here
             });
         });
+        function confirmDeletion() {
+            return confirm('Are you sure? This action cannot be undone.');
+        }
     </script>
 @endsection
