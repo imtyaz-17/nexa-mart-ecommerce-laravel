@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/test', function () {
 //   orderEmail(1);
 //});
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('shop');
 Route::get('/product/{slug?}', [ShopController::class, 'product'])->name('product');
@@ -48,10 +47,12 @@ Route::middleware('auth')->group(function () {
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'index'])->name('admin.login');
-    Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [AdminLoginController::class, 'index'])->name('admin.login');
+        Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+    });
 
-    Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::middleware('auth.admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 

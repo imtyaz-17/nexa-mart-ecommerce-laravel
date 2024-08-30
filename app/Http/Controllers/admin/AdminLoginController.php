@@ -19,11 +19,12 @@ class AdminLoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
-            if (Auth::user()->role === 'admin') {
+        if (Auth::guard('admin')->attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
+            $user = Auth::guard('admin')->user();
+            if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {
-                Auth::logout();
+                Auth::guard('admin')->logout();
                 return redirect()->route('admin.login')->with('error', 'Access denied. You do not have admin privileges.');
             }
         } else {
@@ -32,7 +33,7 @@ class AdminLoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
