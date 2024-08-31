@@ -144,7 +144,7 @@
                 <div class="footer-card">
                     <h3>Get In Touch</h3>
                     <p>
-                         Reach out at: <br>
+                        Reach out at: <br>
                         Dhaka, Bangladesh <br>
                         <a href="mailto:imtyazit17017@gmail.com">imtyazit17017@gmail.com</a> <br>
                         <a href="tel:+8801315781010">+880 1315-781010</a>
@@ -189,6 +189,25 @@
         </div>
     </div>
 </footer>
+<!--Wishlist Modal -->
+<div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('profile.wishlist') }}" class="btn btn-primary data-bs-dismiss="modal">View My Wishlist</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="{{asset('frontend-assets/js/jquery-3.6.0.min.js')}}"></script>
 <script src="{{asset('frontend-assets/js/bootstrap.bundle.5.1.3.min.js')}}"></script>
 <script src="{{asset('frontend-assets/js/instantpages.5.1.0.min.js')}}"></script>
@@ -210,6 +229,26 @@
         } else {
             navbar.classList.remove("sticky");
         }
+    }
+
+    function addToWishlist(id) {
+        $.ajax({
+            url: '{{route("add-to-wishlist")}}',
+            type: 'post',
+            data: {id: id},
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            success: function (response) {
+                if (response.success === true) {
+                    $("#wishlistModal .modal-body").html(response.message);
+                    $("#wishlistModal").modal('show');
+                } else {
+                    window.location.href = "{{route('login')}}";
+                }
+            }
+        });
     }
 </script>
 @yield('customJs')

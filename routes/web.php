@@ -26,6 +26,7 @@ Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/add-to-wishlist', [HomeController::class, 'addToWishlist'])->name('add-to-wishlist');
 
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/orders', [ProfileController::class, 'myOrders'])->name('profile.orders');
     Route::get('/orders/{order}', [ProfileController::class, 'myOrderDetails'])->name('profile.order-details');
+    Route::get('/my-wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
+    Route::delete('/remove-from-wishlist/{wishlist}', [ProfileController::class, 'removeFromWishlist'])->name('profile.remove-from-wishlist');
 });
 
 // Admin Routes

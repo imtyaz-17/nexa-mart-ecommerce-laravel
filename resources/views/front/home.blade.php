@@ -156,12 +156,9 @@
                                                  alt="">
                                         @endif
                                     </a>
-                                    <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                    <a onclick="addToWishlist({{$featureProduct->id}})" class="whishlist" href="javascript:void(0)"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        {{--                                    <a class="btn btn-dark" href="#">--}}
-                                        {{--                                        <i class="fa fa-shopping-cart"></i> Add To Cart--}}
-                                        {{--                                    </a>--}}
                                         <form action="{{ route('cart.add', $featureProduct->id) }}" method="POST"
                                               class="d-inline">
                                             @csrf
@@ -214,12 +211,9 @@
                                                  alt="">
                                         @endif
                                     </a>
-                                    <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                    <a onclick="addToWishlist({{$latestProduct->id}})" class="whishlist" href="javascript:void(0)"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        {{--                                    <a class="btn btn-dark" href="#">--}}
-                                        {{--                                        <i class="fa fa-shopping-cart"></i> Add To Cart--}}
-                                        {{--                                    </a>--}}
                                         <form action="{{ route('cart.add', $latestProduct->id) }}" method="POST"
                                               class="d-inline">
                                             @csrf
