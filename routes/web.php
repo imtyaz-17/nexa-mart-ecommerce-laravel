@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
@@ -119,6 +120,13 @@ Route::prefix('admin')->group(function () {
         Route::post('/orders/change-status/{order}', [OrderController::class, 'changeOrderStatus'])->name('admin.orders.change-status');
         Route::post('/orders/send-invoice/{order}', [OrderController::class, 'sendInvoiceEmail'])->name('admin.orders.send-invoice-email');
 
+        //Users Routes
+        Route::get('/users',[UserController::class,'index'])->name('admin.users.index');
+        Route::get('/users/create',[UserController::class,'create'])->name('admin.users.create');
+        Route::post('/users/store',[UserController::class,'store'])->name('admin.users.store');
+        Route::get('/users/{user}/edit',[UserController::class,'edit'])->name('admin.users.edit');
+        Route::put('/users/{user}',[UserController::class,'update'])->name('admin.users.update');
+        Route::delete('/users/{user}',[UserController::class,'destroy'])->name('admin.users.delete');
     });
 });
 
