@@ -105,8 +105,8 @@
                     <!-- <li class="nav-item">
                           <a class="nav-link active" aria-current="page" href="{{route('home')}}" title="Home">Home</a>
                     </li> -->
-                    @if($categories->isNotEmpty())
-                        @foreach($categories->take(6) as $category)
+                    @if(getCategories()->isNotEmpty())
+                        @foreach(getCategories()->take(6) as $category)
                             <li class="nav-item dropdown">
                                 <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -156,11 +156,11 @@
                 <div class="footer-card">
                     <h3>Important Links</h3>
                     <ul>
-                        <li><a href="#" title="About">About</a></li>
-                        <li><a href="#" title="Contact Us">Contact Us</a></li>
-                        <li><a href="#" title="Privacy">Privacy</a></li>
-                        <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                        <li><a href="#" title="Privacy">Refund Policy</a></li>
+                        <li><a href="{{route('about-us')}}" title="About">About</a></li>
+                        <li><a href="{{route('contact-us')}}" title="Contact Us">Contact Us</a></li>
+                        <li><a href="{{route('privacy-policy')}}" title="Privacy">Privacy</a></li>
+                        <li><a href="{{route('terms-conditions')}}" title="Terms">Terms & Conditions</a></li>
+                        <li><a href="{{route('refund-policy')}}" title="Refund">Refund Policy</a></li>
                     </ul>
                 </div>
             </div>
@@ -169,9 +169,9 @@
                 <div class="footer-card">
                     <h3>My Account</h3>
                     <ul>
-                        <li><a href="#" title="Sell">Login</a></li>
-                        <li><a href="#" title="Advertise">Register</a></li>
-                        <li><a href="#" title="Contact Us">My Orders</a></li>
+                        <li><a href="{{route('login')}}" title="Login">Login</a></li>
+                        <li><a href="{{route('register')}}" title="Register">Register</a></li>
+                        <li><a href="{{route('profile.orders')}}" title="My Orders">My Orders</a></li>
                     </ul>
                 </div>
             </div>
