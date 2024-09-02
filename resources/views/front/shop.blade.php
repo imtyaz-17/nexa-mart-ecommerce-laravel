@@ -196,13 +196,13 @@
         });
 
         function apply_filters() {
-            var brands = [];
+            let brands = [];
             $(".brand-label").each(function () {
                 if ($(this).is(":checked") == true) {
                     brands.push($(this).val())
                 }
             });
-            var url = '{{url()->current()}}?';
+            let url = '{{url()->current()}}?';
 
             // Brand Filter
             if (brands.length > 0) {
@@ -214,6 +214,12 @@
 
             // Sorting Filter
             url+='&sort-by='+$('#sort-by').val();
+
+            //search
+            let keyword =$("#search").val();
+            if(keyword.length>0){
+                url+='&search='+keyword;
+            }
 
             window.location.href = url;
         }

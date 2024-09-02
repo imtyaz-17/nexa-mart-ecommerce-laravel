@@ -23,6 +23,12 @@ class ShopController extends Controller
         $brands = Brand::orderBy('name', 'ASC')->where('status', 1)->get();
         $products = Product::where('status', 1);
 
+
+        //Search box
+        if(!empty($request->get('search'))){
+            $products = $products->where('title', 'like','%'.$request->get('search').'%');
+        }
+
         //Apply Filters
         if (!empty($categorySlug)) {
             $category = Category::where('slug', $categorySlug)->first();
