@@ -52,9 +52,6 @@
 {{--                        <p class="invalid-feedback">{{$message}}</p>--}}
 {{--                        @enderror--}}
                     </div>
-                    <div class="form-group small">
-                        <a href="#" class="forgot-link">Forgot Password?</a>
-                    </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg" value="Register">Register</button>
                 </form>
                 <div class="text-center small">Already have an account? <a href="{{route('login')}}">Login Now</a></div>
