@@ -29,6 +29,22 @@ Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.u
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/add-to-wishlist', [HomeController::class, 'addToWishlist'])->name('add-to-wishlist');
 
+Route::get('/about-us', function () {
+    return view('front.static-pages.about-us');
+})->name('about-us');
+Route::get('/contact-us', function () {
+    return view('front.static-pages.contact-us');
+})->name('contact-us');
+Route::get('/privacy-policy', function () {
+    return view('front.static-pages.privacy');
+})->name('privacy-policy');
+Route::get('/terms-conditions', function () {
+    return view('front.static-pages.terms-conditions');
+})->name('terms-conditions');
+Route::get('/refund-policy', function () {
+    return view('front.static-pages.refund');
+})->name('refund-policy');
+
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/checkout', [CartController::class, 'processCheckout'])->name('cart.process-checkout');
@@ -121,12 +137,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/orders/send-invoice/{order}', [OrderController::class, 'sendInvoiceEmail'])->name('admin.orders.send-invoice-email');
 
         //Users Routes
-        Route::get('/users',[UserController::class,'index'])->name('admin.users.index');
-        Route::get('/users/create',[UserController::class,'create'])->name('admin.users.create');
-        Route::post('/users/store',[UserController::class,'store'])->name('admin.users.store');
-        Route::get('/users/{user}/edit',[UserController::class,'edit'])->name('admin.users.edit');
-        Route::put('/users/{user}',[UserController::class,'update'])->name('admin.users.update');
-        Route::delete('/users/{user}',[UserController::class,'destroy'])->name('admin.users.delete');
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+        Route::post('/users/store', [UserController::class, 'store'])->name('admin.users.store');
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.delete');
     });
 });
 
