@@ -9,7 +9,7 @@
     </symbol>
 </svg>
 @if (session('error'))
-    <div class="d-flex alert alert-success alert-dismissible fade show" role="alert">
+    <div class="d-flex alert alert-danger alert-dismissible fade show" role="alert">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
             <use xlink:href="#exclamation-triangle-fill"/>
         </svg>
