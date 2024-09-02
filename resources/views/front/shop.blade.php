@@ -130,12 +130,19 @@
                                             <a onclick="addToWishlist({{$product->id}})" class="whishlist" href="javascript:void(0)"><i class="far fa-heart"></i></a>
 
                                             <div class="product-action">
-                                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
-                                                    @csrf
+                                                @if($product->qty>0)
+                                                    <form action="{{ route('cart.add', $product->id) }}" method="POST"
+                                                          class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-dark">
+                                                            <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                        </button>
+                                                    </form>
+                                                @else
                                                     <button type="submit" class="btn btn-dark">
-                                                        <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                        <i class="fas fa-shopping-cart"></i> &nbsp;Out Of Stock!
                                                     </button>
-                                                </form>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="card-body text-center mt-3">

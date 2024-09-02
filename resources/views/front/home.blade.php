@@ -9,15 +9,17 @@
                     <!-- <img src="images/carousel-1.jpg" class="d-block w-100" alt=""> -->
 
                     <picture>
-                        <source media="(max-width: 799px)" srcset="{{asset('frontend-assets/images/carousel-1-m.jpg')}}" />
-                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-1.jpg')}}" />
-                        <img src="images/carousel-1.jpg" alt="" />
+                        <source media="(max-width: 799px)"
+                                srcset="{{asset('frontend-assets/images/carousel-1-m.jpg')}}"/>
+                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-1.jpg')}}"/>
+                        <img src="images/carousel-1.jpg" alt=""/>
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3">
                             <h1 class="display-4 text-white mb-3">Kids Fashion</h1>
-                            <p class="mx-md-5 px-5">Explore our latest collection of stylish and comfortable kids' clothing.
+                            <p class="mx-md-5 px-5">Explore our latest collection of stylish and comfortable kids'
+                                clothing.
                                 Perfect for every occasion, designed with love.</p>
                             <a class="btn btn-outline-light py-2 px-4 mt-3" href="{{route('shop')}}">Shop Now</a>
                         </div>
@@ -26,9 +28,10 @@
                 <div class="carousel-item">
 
                     <picture>
-                        <source media="(max-width: 799px)" srcset="{{asset('frontend-assets/images/carousel-2-m.jpg')}}" />
-                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-2.jpg')}}" />
-                        <img src="{{asset('frontend-assets/images/carousel-2.jpg')}}" alt="" />
+                        <source media="(max-width: 799px)"
+                                srcset="{{asset('frontend-assets/images/carousel-2-m.jpg')}}"/>
+                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-2.jpg')}}"/>
+                        <img src="{{asset('frontend-assets/images/carousel-2.jpg')}}" alt=""/>
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -44,9 +47,10 @@
                     <!-- <img src="images/carousel-3.jpg" class="d-block w-100" alt=""> -->
 
                     <picture>
-                        <source media="(max-width: 799px)" srcset="{{asset('frontend-assets/images/carousel-3-m.jpg')}}" />
-                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-3.jpg')}}" />
-                        <img src="{{asset('frontend-assets/images/carousel-2.jpg')}}" alt="" />
+                        <source media="(max-width: 799px)"
+                                srcset="{{asset('frontend-assets/images/carousel-3-m.jpg')}}"/>
+                        <source media="(min-width: 800px)" srcset="{{asset('frontend-assets/images/carousel-3.jpg')}}"/>
+                        <img src="{{asset('frontend-assets/images/carousel-2.jpg')}}" alt=""/>
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -156,16 +160,23 @@
                                                  alt="">
                                         @endif
                                     </a>
-                                    <a onclick="addToWishlist({{$featureProduct->id}})" class="whishlist" href="javascript:void(0)"><i class="far fa-heart"></i></a>
+                                    <a onclick="addToWishlist({{$featureProduct->id}})" class="whishlist"
+                                       href="javascript:void(0)"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        <form action="{{ route('cart.add', $featureProduct->id) }}" method="POST"
-                                              class="d-inline">
-                                            @csrf
+                                        @if($featureProduct->qty>0)
+                                            <form action="{{ route('cart.add', $featureProduct->id) }}" method="POST"
+                                                  class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-dark">
+                                                    <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                </button>
+                                            </form>
+                                        @else
                                             <button type="submit" class="btn btn-dark">
-                                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                <i class="fas fa-shopping-cart"></i> &nbsp;Out Of Stock!
                                             </button>
-                                        </form>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-body text-center mt-3">
@@ -211,16 +222,23 @@
                                                  alt="">
                                         @endif
                                     </a>
-                                    <a onclick="addToWishlist({{$latestProduct->id}})" class="whishlist" href="javascript:void(0)"><i class="far fa-heart"></i></a>
+                                    <a onclick="addToWishlist({{$latestProduct->id}})" class="whishlist"
+                                       href="javascript:void(0)"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        <form action="{{ route('cart.add', $latestProduct->id) }}" method="POST"
-                                              class="d-inline">
-                                            @csrf
+                                        @if($latestProduct->qty>0)
+                                            <form action="{{ route('cart.add', $latestProduct->id) }}" method="POST"
+                                                  class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-dark">
+                                                    <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                </button>
+                                            </form>
+                                        @else
                                             <button type="submit" class="btn btn-dark">
-                                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                                <i class="fas fa-shopping-cart"></i> &nbsp;Out Of Stock!
                                             </button>
-                                        </form>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-body text-center mt-3">

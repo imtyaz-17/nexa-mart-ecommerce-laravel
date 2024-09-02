@@ -66,14 +66,19 @@
                         <h2 class="price ">${{$product->price}}</h2>
 
                         <p>{!! $product->short_description !!} </p>
-{{--                        <a href="{{route('cart.add', $product->id)}}" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO--}}
-{{--                            CART</a>--}}
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
-                            @csrf
+                        @if($product->qty>0)
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST"
+                                  class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-dark">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                </button>
+                            </form>
+                        @else
                             <button type="submit" class="btn btn-dark">
-                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                <i class="fas fa-shopping-cart"></i> &nbsp;Out Of Stock!
                             </button>
-                        </form>
+                        @endif
 
                     </div>
                 </div>
