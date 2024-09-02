@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Category;
+use App\Models\Country;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductImage;
+use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -25,17 +29,12 @@ class ProfileController extends Controller
             ->with('subcategories')
             ->orderBy('name', 'ASC')->get();
 
-        return view('profile.profile', [
-            'user' => $request->user(),
-            'categories' => $categories,
-        ]);
-    }
+        $user= User::where('id', Auth::id())->first();
+        $countries = Country::orderBy('name', 'ASC')->get();
 
-    public function edit(Request $request): View
-    {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $address= CustomerAddress::where('user_id',$user->id)->first();
+
+        return view('profile.profile',compact('user', 'countries', 'categories', 'address'));
     }
 
     /**
@@ -43,15 +42,23 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:11',
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        try {
+            // Update the user's profile
+            $user = $request->user();
+            $user->name = $validatedData['name'];
+            $user->phone = $validatedData['phone'];
+            $user->save();
+        } catch (ValidationException $e) {
+            return Redirect::back()->withErrors($e->errors())->withInput();
         }
+        // Redirect with a success message
+        return Redirect::route('profile')->with('success', 'profile-updated');
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -75,6 +82,38 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    public function updateAddress(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'mobile' => 'required|string|max:15',
+            'country' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'apartment' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'zip' => 'required|string|max:10'
+        ]);
+        $user = auth()->user();
+        $customer_address = CustomerAddress::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'mobile' => $validated['mobile'],
+                'country_id' => $validated['country'],
+                'address' => $validated['address'],
+                'apartment' => $validated['apartment'],
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'zip' => $validated['zip']
+            ]
+        );
+        return Redirect::back()->with('success', 'address-updated');
+    }
     public function myOrders()
     {
         $categories = Category::where('status', 1)

@@ -24,7 +24,6 @@
                         <div class="card shadow-lg border-0">
                             <div class="card-body checkout-form">
                                 <div class="row">
-
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <input type="text" name="first_name" id="first_name"
