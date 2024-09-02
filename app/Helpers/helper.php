@@ -1,11 +1,19 @@
 <?php
 
 use App\Mail\OrderEmail;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
-function orderEmail($orderId, $userType="customer")
+function getCategories()
+{
+    return Category::where('status', 1)
+        ->with('subcategories')
+        ->orderBy('name', 'ASC')->get();
+}
+
+function orderEmail($orderId, $userType = "customer")
 {
     $order = Order::where('orders.id', $orderId)
         ->with('orderItems')
@@ -15,11 +23,10 @@ function orderEmail($orderId, $userType="customer")
         ->first();
     if ($userType == "customer") {
         $subject = 'Thank you for your order';
-        $email= $order->email;
-    }
-    else{
+        $email = $order->email;
+    } else {
         $subject = 'New Order Placed';
-        $email= User::where('role', 'admin')->first()->email;
+        $email = User::where('role', 'admin')->first()->email;
     }
     $mailData = [
         'subject' => $subject,
