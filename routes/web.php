@@ -29,6 +29,7 @@ Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/add-to-wishlist', [HomeController::class, 'addToWishlist'])->name('add-to-wishlist');
+Route::post('send-contact-email/', [HomeController::class, 'sendContactEmail'])->name('send-contact-email');
 
 Route::get('/about-us', function () {
     return view('front.static-pages.about-us');
@@ -53,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('cart.apply-discount');
     Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.remove-coupon');
     Route::get('/thanks/{orderId}', [CartController::class, 'thankYou'])->name('thanks');
+
 
     // User Profile Routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

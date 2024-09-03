@@ -14,6 +14,7 @@
 
         <section class="section-10">
             <div class="container">
+                @include('message')
                 <div class="section-title mt-5">
                     <h2>We’d Love to Hear From You</h2>
                 </div>
@@ -24,7 +25,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 mt-3 pe-lg-5">
-                        <p>If you have any questions, feedback, or just want to say hello, feel free to reach out to us. We're here to help and ensure your experience with NexaMart is nothing short of exceptional. Your input helps us to improve and serve you better.</p>
+                        <p>If you have any questions, feedback, or just want to say hello, feel free to reach out to us.
+                            We're here to help and ensure your experience with NexaMart is nothing short of exceptional.
+                            Your input helps us to improve and serve you better.</p>
                         <address>
                             Dhaka-106, Bangladesh<br>
                             <a href="tel:+8801315781010">+880 1315-781010</a><br>
@@ -37,30 +40,36 @@
                             @csrf
                             <div class="mb-3">
                                 <label class="mb-2" for="name">Name</label>
-                                <input class="form-control" id="name" type="text" name="name" required data-error="Please enter your name">
-                                <div class="help-block with-errors"></div>
+                                <input class="form-control" id="name" type="text" name="name"
+                                       data-error="Please enter your name">
+                                <p class="help-block with-errors"></p>
                             </div>
 
                             <div class="mb-3">
                                 <label class="mb-2" for="email">Email</label>
-                                <input class="form-control" id="email" type="email" name="email" required data-error="Please enter your Email">
-                                <div class="help-block with-errors"></div>
+                                <input class="form-control" id="email" type="email" name="email"
+                                       data-error="Please enter your Email">
+                                <p class="help-block with-errors"></p>
                             </div>
 
                             <div class="mb-3">
                                 <label class="mb-2" for="msg_subject">Subject</label>
-                                <input class="form-control" id="msg_subject" type="text" name="subject" required data-error="Please enter your message subject">
-                                <div class="help-block with-errors"></div>
+                                <input class="form-control" id="msg_subject" type="text" name="subject"
+                                       data-error="Please enter your message subject">
+                                <p class="help-block with-errors"></p>
                             </div>
 
                             <div class="mb-3">
                                 <label for="message" class="mb-2">Message</label>
-                                <textarea class="form-control" rows="3" id="message" name="message" required data-error="Write your message"></textarea>
-                                <div class="help-block with-errors"></div>
+                                <textarea class="form-control" rows="3" id="message" name="message"
+                                          data-error="Write your message"></textarea>
+                                <p class="help-block with-errors"></p>
                             </div>
 
                             <div class="form-submit">
-                                <button class="btn btn-dark" type="submit" id="form-submit"><i class="material-icons mdi mdi-message-outline"></i> Send Message</button>
+                                <button class="btn btn-dark" type="submit" id="form-submit"><i
+                                        class="material-icons mdi mdi-message-outline"></i> Send Message
+                                </button>
                                 <div id="msgSubmit" class="h3 text-center hidden"></div>
                                 <div class="clearfix"></div>
                             </div>
@@ -70,4 +79,50 @@
             </div>
         </section>
     </main>
+@endsection
+@section('customJs')
+    <script>
+        $("#contactForm").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: '{{route("send-contact-email")}}',
+                type: 'post',
+                data: $(this).serializeArray(),
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                success: function (response) {
+                    if (response.status == true) {
+                        window.location.href="{{route('contact-us')}}"
+                    }
+                    else {
+                        let errors = response.errors;
+                        if(errors.name){
+                            $("#name").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.name);
+                        }else{
+                            $("#name").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+
+                        }
+                        if (errors.email) {
+                            $("#email").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.email);
+                        }else{
+                            $("#email").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+                        }
+                        if (errors.subject) {
+                            $("#msg_subject").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.subject);
+                        }else{
+                            $("#msg_subject").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+                        }
+                        if (errors.message) {
+                            $("#message").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.message);
+                        }else{
+                            $("#message").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html('');
+                        }
+                    }
+                }
+            })
+        });
+    </script>
 @endsection
