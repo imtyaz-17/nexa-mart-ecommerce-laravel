@@ -29,11 +29,6 @@
                             @include('profile.partials.update-address-form')
                         </div>
                     </div>
-                    <div class="p-4 bg-white shadow sm:rounded-lg mt-3">
-                        <div class="max-w-xl">
-                            @include('profile.partials.update-password-form')
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

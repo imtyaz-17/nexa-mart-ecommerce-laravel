@@ -150,4 +150,9 @@ class ProfileController extends Controller
         $wishlist->delete();
         return Redirect::back()->with('success', 'Product removed from wishlist');
     }
+
+    public function changePassword()
+    {
+        return view('profile.update-password-form');
+    }
 }

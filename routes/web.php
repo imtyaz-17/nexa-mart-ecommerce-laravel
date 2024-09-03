@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [ProfileController::class, 'myOrderDetails'])->name('profile.order-details');
     Route::get('/my-wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
     Route::delete('/remove-from-wishlist/{wishlist}', [ProfileController::class, 'removeFromWishlist'])->name('profile.remove-from-wishlist');
+    Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 });
 
 // Admin Routes
