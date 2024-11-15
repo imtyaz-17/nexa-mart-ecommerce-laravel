@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -54,7 +55,7 @@ class HomeController extends Controller
 
     public function sendContactEmail(Request $request)
     {
-        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'subject' => 'required|min:5|max:255',
