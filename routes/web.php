@@ -11,6 +11,8 @@ use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
@@ -29,7 +31,7 @@ Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/add-to-wishlist', [HomeController::class, 'addToWishlist'])->name('add-to-wishlist');
-Route::post('send-contact-email/', [HomeController::class, 'sendContactEmail'])->name('send-contact-email');
+Route::post('/send-contact-email', [HomeController::class, 'sendContactEmail'])->name('send-contact-email');
 
 Route::get('/about-us', function () {
     return view('front.static-pages.about-us');
