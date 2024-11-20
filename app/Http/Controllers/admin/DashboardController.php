@@ -15,37 +15,33 @@ class DashboardController extends Controller
     //
     public function index()
     {
-// Closure to handle the "not cancelled" condition
-        $cancelledCondition = function ($query) {
-            $query->where('delivery_status', '!=', 'cancelled');
-        };
-
-// Total Metrics
-        $totalOrders = Order::where($cancelledCondition)->count();
+        $totalOrders = Order::where('delivery_status', '!=', 'cancelled')->count();
         $totalProducts = Product::count();
         $totalCustomers = User::where('role', 'user')->count();
-        $totalSale = Order::where($cancelledCondition)->sum('grand_total');
+        $totalSale = Order::where('delivery_status', '!=', 'cancelled')->sum('grand_total');
 
-// Current Month Sales
-        $today = Carbon::today();
-        $startOfMonth = $today->copy()->startOfMonth();
-        $currentMonthSale = Order::where($cancelledCondition)
-            ->whereBetween('created_at', [$startOfMonth, $today])
+        // Current Month
+        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $currentMonthSale = Order::where('delivery_status', '!=', 'cancelled')
+            ->whereDate('created_at', '>=', $startOfMonth)
+            ->whereDate('created_at', '<=', $todayDate)
             ->sum('grand_total');
 
-// Last Month Sales
-        $lastMonth = $today->copy()->subMonth();
-        $lastMonthStart = $lastMonth->startOfMonth();
-        $lastMonthEnd = $lastMonth->endOfMonth();
-        $lastMonthSale = Order::where($cancelledCondition)
-            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
+        // Last Month
+        $lastMonthStartDate = Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d');
+        $lastMonthName = Carbon::now()->subMonth()->startOfMonth()->format('M');
+        $lastMonthEndDate = Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d');
+        $lastMonthSale = Order::where('delivery_status', '!=', 'cancelled')
+            ->whereDate('created_at', '>=', $lastMonthStartDate)
+            ->whereDate('created_at', '<=', $lastMonthEndDate)
             ->sum('grand_total');
-        $lastMonthName = $lastMonth->format('M');
 
-// Last 30 Days Sales
-        $lastThirtyDaysStart = $today->copy()->subDays(30);
-        $lastThirtyDaysSale = Order::where($cancelledCondition)
-            ->whereBetween('created_at', [$lastThirtyDaysStart, $today])
+        // last 30days
+        $lastThirtyDayStartDate = Carbon::now()->subDays(30)->format('Y-m-d');
+        $lastThirtyDaysSale = Order::where('delivery_status', '!=', 'cancelled')
+            ->whereDate('created_at', '>=', $lastThirtyDayStartDate)
+            ->whereDate('created_at', '<=', $todayDate)
             ->sum('grand_total');
 
         return view('admin.dashboard', [
