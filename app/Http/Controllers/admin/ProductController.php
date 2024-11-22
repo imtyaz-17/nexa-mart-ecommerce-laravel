@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductRating;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -26,6 +27,7 @@ class ProductController extends Controller
         $products = $products->paginate(10);
         return view('admin.products.list', compact('products'));
     }
+
     public function create()
     {
         $categories = Category::orderBy('name', 'ASC')->get();
@@ -33,11 +35,13 @@ class ProductController extends Controller
 
         return view('admin.products.create', compact('categories', 'brands'));
     }
+
     public function productSubcategories($categoryId)
     {
         $subcategories = Category::find($categoryId)->subcategories;
         return response()->json($subcategories);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,7 +54,7 @@ class ProductController extends Controller
             'compare_price' => 'nullable|numeric|min:0|gt:price',
             'category' => 'required|exists:categories,id',
             'sub_category' => 'nullable|exists:sub_categories,id',
-            'sku'=>'required|string|max:255|unique:products,sku',
+            'sku' => 'required|string|max:255|unique:products,sku',
             'brand' => 'nullable|exists:brands,id',
             'is_featured' => 'required|in:yes,no',
             'barcode' => 'nullable|string|max:255|unique:products,barcode',
@@ -61,22 +65,22 @@ class ProductController extends Controller
         ]);
 
         $product = new Product();
-        $product->title =$validated['title'];
-        $product->slug=$validated['slug'];
-        $product->short_description=$validated['short_description'];
-        $product->description=$validated['description'];
-        $product->shipping_returns=$validated['shipping_returns'];
-        $product->price=$validated['price'];
-        $product->compare_price=$validated['compare_price'];
-        $product->sku=$validated['sku'];
-        $product->barcode=$validated['barcode'];
-        $product->track_qty=$validated['track_qty'];
-        $product->qty=$validated['qty'];
-        $product->status=$validated['status'];
-        $product->category_id=$validated['category'];
-        $product->sub_category_id=$validated['sub_category'];
-        $product->brand_id=$validated['brand'];
-        $product->is_featured=$validated['is_featured'];
+        $product->title = $validated['title'];
+        $product->slug = $validated['slug'];
+        $product->short_description = $validated['short_description'];
+        $product->description = $validated['description'];
+        $product->shipping_returns = $validated['shipping_returns'];
+        $product->price = $validated['price'];
+        $product->compare_price = $validated['compare_price'];
+        $product->sku = $validated['sku'];
+        $product->barcode = $validated['barcode'];
+        $product->track_qty = $validated['track_qty'];
+        $product->qty = $validated['qty'];
+        $product->status = $validated['status'];
+        $product->category_id = $validated['category'];
+        $product->sub_category_id = $validated['sub_category'];
+        $product->brand_id = $validated['brand'];
+        $product->is_featured = $validated['is_featured'];
         $product->save();
 
         if (!empty($validated['images'])) {
@@ -105,13 +109,15 @@ class ProductController extends Controller
         }
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
+
     public function show(Product $product)
     {
 
     }
+
     public function edit($productId)
     {
-        $product=Product::find($productId);
+        $product = Product::find($productId);
         if (empty($product)) {
             return redirect()->route('admin.products.index')
                 ->with('error', 'Product not found.');
@@ -123,16 +129,17 @@ class ProductController extends Controller
         $productImages = ProductImage::where('product_id', $product->id)->get();
         return view('admin.products.edit', compact('product', 'categories', 'subcategories', 'brands', 'productImages'));
     }
+
     public function update(Request $request, $productId)
     {
-        $product=Product::find($productId);
+        $product = Product::find($productId);
         if (empty($product)) {
             return redirect()->route('admin.products.index')
                 ->with('error', 'Product not found.');
         }
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug,'.$product->id.',id',
+            'slug' => 'required|string|max:255|unique:products,slug,' . $product->id . ',id',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'shipping_returns' => 'nullable|string',
@@ -140,32 +147,32 @@ class ProductController extends Controller
             'compare_price' => 'nullable|numeric|min:0|gt:price',
             'category' => 'required|exists:categories,id',
             'sub_category' => 'nullable|exists:sub_categories,id',
-            'sku'=>'required|string|max:255|unique:products,sku,'.$product->id.',id',
+            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id . ',id',
             'brand' => 'nullable|exists:brands,id',
             'is_featured' => 'required|in:yes,no',
-            'barcode' => 'nullable|string|max:255|unique:products,barcode,'.$product->id.',id',
+            'barcode' => 'nullable|string|max:255|unique:products,barcode,' . $product->id . ',id',
             'track_qty' => 'required|in:yes,no',
             'status' => 'required|boolean',
             'qty' => $request->track_qty === 'yes' ? 'required|integer|min:0' : 'nullable|integer|min:0',
             'images' => 'nullable|string',
         ]);
 
-        $product->title =$validated['title'];
-        $product->slug=$validated['slug'];
-        $product->short_description=$validated['short_description'];
-        $product->description=$validated['description'];
-        $product->shipping_returns=$validated['shipping_returns'];
-        $product->price=$validated['price'];
-        $product->compare_price=$validated['compare_price'];
-        $product->sku=$validated['sku'];
-        $product->barcode=$validated['barcode'];
-        $product->track_qty=$validated['track_qty'];
-        $product->qty=$validated['qty'];
-        $product->status=$validated['status'];
-        $product->category_id=$validated['category'];
-        $product->sub_category_id=$validated['sub_category'];
-        $product->brand_id=$validated['brand'];
-        $product->is_featured=$validated['is_featured'];
+        $product->title = $validated['title'];
+        $product->slug = $validated['slug'];
+        $product->short_description = $validated['short_description'];
+        $product->description = $validated['description'];
+        $product->shipping_returns = $validated['shipping_returns'];
+        $product->price = $validated['price'];
+        $product->compare_price = $validated['compare_price'];
+        $product->sku = $validated['sku'];
+        $product->barcode = $validated['barcode'];
+        $product->track_qty = $validated['track_qty'];
+        $product->qty = $validated['qty'];
+        $product->status = $validated['status'];
+        $product->category_id = $validated['category'];
+        $product->sub_category_id = $validated['sub_category'];
+        $product->brand_id = $validated['brand'];
+        $product->is_featured = $validated['is_featured'];
         $product->save();
 
         if (!empty($validated['images'])) {
@@ -194,6 +201,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
 
     }
+
     public function destroy($productId)
     {
         $product = Product::find($productId);
@@ -211,5 +219,27 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
+    }
+
+    public function product_ratings(Request $request)
+    {
+        $ratings = ProductRating::select('product_ratings.*', 'products.title as productTitle')->orderBy('product_ratings.created_at', 'DESC');
+        $ratings = $ratings->leftJoin('products', 'products.id', 'product_ratings.product_id');
+        if (!empty($request->keyword)) {
+            $keyword = $request->keyword;
+            $ratings = $ratings->where('products.title', 'LIKE', "%{$keyword}%");
+        }
+        $ratings = $ratings->paginate(10);
+
+        return view('admin.products.ratings', compact('ratings'));
+    }
+
+    public function change_rating_status($id)
+    {
+        $productRating = ProductRating::find($id);
+        if ($productRating->status) $productRating->status = false;
+        else $productRating->status = true;
+        $productRating->save();
+        return redirect()->route('admin.products.ratings')->with('success', 'Product Rating status changed.');
     }
 }

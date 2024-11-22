@@ -123,6 +123,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.delete');
+        Route::get('/products/ratings', [ProductController::class, 'product_ratings'])->name('admin.products.ratings');
+        Route::post('/products/ratings/{ratingId}', [ProductController::class, 'change_rating_status'])->name('admin.products.ratings-update');
 
         // Shipping Routes
         Route::get('/shipping', [ShippingController::class, 'index'])->name('admin.shipping.index');
