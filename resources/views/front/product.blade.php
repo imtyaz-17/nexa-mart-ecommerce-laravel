@@ -36,27 +36,40 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    @if(session('error'))
-                        <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
+                    @if(session('errorCart'))
+                        <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center"
+                             role="alert">
                             <div>
-                                <strong>{{ session('error') }}</strong>
+                                <strong>{{ session('errorCart') }}</strong>
                             </div>
                             <a href="{{ route('cart') }}" class="ml-4 d-flex">
-                                 View Cart <i class="fas fa-shopping-cart text-primary pt-1"></i>
+                                &nbsp; View Cart<i class="fas fa-shopping-cart text-primary pt-1"></i>
                             </a>
                         </div>
                     @endif
                     <div class="bg-light right">
                         <h1>{{$product->title}}</h1>
+                        @php
+                            if ($avgRating>0)
+                                 $avgRatingPercentage = ($avgRating / 5) * 100;
+                            else
+                                $avgRatingPercentage =0;
+                        @endphp
                         <div class="d-flex mb-3">
-                            <div class="text-primary mr-2">
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star-half-alt"></small>
-                                <small class="far fa-star"></small>
+                            <div class="back-stars mr-2 pt-1">
+                                @for($i = 0; $i < 5; $i++)
+                                    <small> <i class="fa fa-star" aria-hidden="true"></i></small>
+                                @endfor
+                                <div class="front-stars pt-1"
+                                     style="width: {{ $avgRatingPercentage }}%">
+                                    @for($i = 0; $i < 5; $i++)
+                                        <small> <i class="fa fa-star" aria-hidden="true"></i></small>
+                                    @endfor
+                                </div>
                             </div>
-                            <small class="pt-1">(99 Reviews)</small>
+                            <small
+                                class="pt-1 ps-1">( {{($product->product_ratings_count>1)? $product->product_ratings_count.' Reviews':$product->product_ratings_count.' Review'}}
+                                )</small>
                         </div>
                         @if($product->compare_price>0)
                             <h2 class="price text-secondary">
@@ -86,9 +99,11 @@
                     <div class="bg-light">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                        data-bs-target="#description" type="button" role="tab"
-                                        aria-controls="description" aria-selected="true">Description
+                                <button
+                                    class="nav-link {{ session('success') ||session('error')|| $errors->any() ? '' : 'active' }}"
+                                    id="description-tab" data-bs-toggle="tab"
+                                    data-bs-target="#description" type="button" role="tab"
+                                    aria-controls="description" aria-selected="true">Description
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -98,14 +113,18 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
-                                        type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews
+                                <button
+                                    class="nav-link {{ session('success')||session('error') || $errors->any()? 'active' : '' }}"
+                                    id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
+                                    type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews
                                 </button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="description" role="tabpanel"
-                                 aria-labelledby="description-tab">
+                            <div
+                                class="tab-pane fade {{ session('success')||session('error') || $errors->any() ? '' : 'show active' }}"
+                                id="description" role="tabpanel"
+                                aria-labelledby="description-tab">
                                 <p>
                                     {!! $product->description !!}
                                 </p>
@@ -113,8 +132,118 @@
                             <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
                                 <p>{!! $product->shipping_returns !!}</p>
                             </div>
-                            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-
+                            <div
+                                class="tab-pane fade {{ session('success')||session('error') || $errors->any()? 'show active' : '' }}"
+                                id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        @if(session('success'))
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                {!! session('success') !!}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                        @endif
+                                        @if(session('error'))
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {!! session('error') !!}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                        @endif
+                                        <form method="post" action="{{route('product.rating',$product->id)}}">
+                                            @csrf
+                                            <h3 class="h4 pb-3 font-bold">Write a Review</h3>
+                                            <div class="form-group mb-3">
+                                                <label for="rating">Rating</label>
+                                                <br>
+                                                <div class="rating @error('rating') is-invalid @enderror"
+                                                     style="width: 10rem">
+                                                    <input id="rating-5" type="radio" name="rating" value="5"/><label
+                                                        for="rating-5"><i class="fas fa-3x fa-star"></i></label>
+                                                    <input id="rating-4" type="radio" name="rating" value="4"/><label
+                                                        for="rating-4"><i class="fas fa-3x fa-star"></i></label>
+                                                    <input id="rating-3" type="radio" name="rating" value="3"/><label
+                                                        for="rating-3"><i class="fas fa-3x fa-star"></i></label>
+                                                    <input id="rating-2" type="radio" name="rating" value="2"/><label
+                                                        for="rating-2"><i class="fas fa-3x fa-star"></i></label>
+                                                    <input id="rating-1" type="radio" name="rating" value="1"/><label
+                                                        for="rating-1"><i class="fas fa-3x fa-star"></i></label>
+                                                </div>
+                                                @error('rating')
+                                                <p class="invalid-feedback d-block">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="">How was your overall experience?</label>
+                                                <textarea name="comment" id="comment"
+                                                          class="form-control  @error('comment') is-invalid @enderror"
+                                                          cols="30"
+                                                          rows="10"
+                                                          placeholder="How was your overall experience?"></textarea>
+                                                @error('comment')
+                                                <p class="invalid-feedback">{{$message}}</p>
+                                                @enderror
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-dark">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <div class="overall-rating mb-3">
+                                        <div class="d-flex">
+                                            <h1 class="h3 pe-3">{{$avgRating}}</h1>
+                                            <div class="star-rating mt-2" title="">
+                                                <div class="back-stars">
+                                                    @for($i = 0; $i < 5; $i++)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                    @endfor
+                                                    <div class="front-stars"
+                                                         style="width: {{ $avgRatingPercentage }}%">
+                                                        @for($i = 0; $i < 5; $i++)
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                        @endfor
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pt-2 ps-2">
+                                                ({{($product->product_ratings_count>1)? $product->product_ratings_count.' Reviews':$product->product_ratings_count.' Review'}}
+                                                )
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($product->productRatings->isNotEmpty())
+                                        @foreach($product->productRatings as $rating)
+                                            @php
+                                                $ratingPercentage = ($rating->rating / 5) * 100;
+                                            @endphp
+                                            <div class="rating-group mb-4">
+                                                <span><strong>{{ $rating->user->name}}</strong></span>
+                                                <!-- Assuming the user relationship -->
+                                                <div class="star-rating mt-2" title="">
+                                                    <div class="back-stars">
+                                                        @for($i = 0; $i < 5; $i++)
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                        @endfor
+                                                        <div class="front-stars"
+                                                             style="width: {{ $ratingPercentage }}%">
+                                                            @for($i = 0; $i < 5; $i++)
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if($rating->comment)
+                                                    <div class="my-3">
+                                                        <p>{{ $rating->comment }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

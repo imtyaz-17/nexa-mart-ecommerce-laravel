@@ -29,14 +29,14 @@ class CartController extends Controller
     {
         $product = Product::with('productImages')->find($product_id);
         if (!$product) {
-            return redirect()->back()->with('error', 'Product not found.');
+            return redirect()->back()->with('errorCart', 'Product not found.');
         }
         // Check if product is already in the cart
         $duplicates = Cart::search(function ($cartItem, $rowId) use ($product) {
             return $cartItem->id === $product->id;
         });
         if ($duplicates->isNotEmpty()) {
-            return redirect()->back()->with('error', 'Product already in cart.');
+            return redirect()->back()->with('errorCart', 'Product already in cart.');
         }
 
         // Add product to cart
@@ -226,8 +226,8 @@ class CartController extends Controller
                 $orderItem->save();
 
                 //Update Product Stock
-                $product= Product::find($item->id);
-                if($product->track_qty =='yes'){
+                $product = Product::find($item->id);
+                if ($product->track_qty == 'yes') {
                     $updateQty = $product->qty - $item->qty;
                     $product->update(['qty' => $updateQty]);
                 }
@@ -329,11 +329,11 @@ class CartController extends Controller
 
         //minimum purchased amount
         $subTotal = (float)Cart::subtotal(2, '.', '');
-        if ($code->min_purchased>0){
-            if($subTotal<$code->min_purchased){
+        if ($code->min_purchased > 0) {
+            if ($subTotal < $code->min_purchased) {
                 return response()->json([
                     'status' => false,
-                    'error'=>'Your purchased amount must be greater than '.$code->min_purchased,
+                    'error' => 'Your purchased amount must be greater than ' . $code->min_purchased,
                 ]);
             }
         }
