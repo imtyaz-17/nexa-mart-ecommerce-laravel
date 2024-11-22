@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Product extends Model
 {
     use HasFactory;
-    protected $guarded =[];
 
-    public function productImages() : HasMany
+    protected $guarded = [];
+
+    public function productImages(): HasMany
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function productRatings(): HasMany
+    {
+        return $this->hasMany(ProductRating::class)->where('status', true);
     }
 }

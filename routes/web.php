@@ -16,13 +16,12 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/test', function () {
-//   orderEmail(1);
-//});
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('shop');
 Route::get('/product/{slug?}', [ShopController::class, 'product'])->name('product');
@@ -58,17 +57,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/thanks/{orderId}', [CartController::class, 'thankYou'])->name('thanks');
 
 
+    Route::post('/product/rating/{productId}', [ProductRatingController::class, 'store'])->name('product.rating');
+
+
     // User Profile Routes
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/address', [ProfileController::class, 'updateAddress'])->name('profile.address.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+
 
     Route::get('/orders', [ProfileController::class, 'myOrders'])->name('profile.orders');
     Route::get('/orders/{order}', [ProfileController::class, 'myOrderDetails'])->name('profile.order-details');
     Route::get('/my-wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
     Route::delete('/remove-from-wishlist/{wishlist}', [ProfileController::class, 'removeFromWishlist'])->name('profile.remove-from-wishlist');
-    Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+
 });
 
 // Admin Routes
