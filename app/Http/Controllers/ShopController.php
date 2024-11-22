@@ -25,8 +25,8 @@ class ShopController extends Controller
 
 
         //Search box
-        if(!empty($request->get('search'))){
-            $products = $products->where('title', 'like','%'.$request->get('search').'%');
+        if (!empty($request->get('search'))) {
+            $products = $products->where('title', 'like', '%' . $request->get('search') . '%');
         }
 
         //Apply Filters
@@ -49,40 +49,30 @@ class ShopController extends Controller
         if (!empty($request->get('price_max')) && !empty($request->get('price_min'))) {
             $priceMin = intval($request->get('price_min'));
             $priceMax = intval($request->get('price_max'));
-            if($priceMax ===1000)
-            {
+            if ($priceMax === 1000) {
                 $products = $products->whereBetween('price', [$priceMin, 10000000]);
-            }
-            else
-            {
+            } else {
                 $products = $products->whereBetween('price', [$priceMin, $priceMax]);
             }
         }
         $sortBy = $request->get('sort-by');
 
-        if (!empty($request->get('sort-by')))
-        {
-            if ($sortBy== 'latest')
-            {
+        if (!empty($request->get('sort-by'))) {
+            if ($sortBy == 'latest') {
                 $products = $products->orderBy('created_at', 'desc');
-            }
-            elseif ($sortBy == 'price_asc')
-            {
+            } elseif ($sortBy == 'price_asc') {
                 $products = $products->orderBy('price', 'asc');
-            }
-            else
-            {
+            } else {
                 $products = $products->orderBy('price', 'desc');
             }
-        }
-        else
-        {
+        } else {
             $products = $products->orderBy('created_at', 'desc');
         }
 
         $products = $products->paginate(6);
         return view('front.shop', compact('categories', 'brands', 'products', 'categorySelected', 'subcategorySelected', 'brandsArray', 'priceMax', 'priceMin', 'sortBy'));
     }
+
     public function product($slug)
     {
         $categories = Category::where('status', 1)
@@ -90,19 +80,14 @@ class ShopController extends Controller
             ->orderBy('name', 'ASC')->get();
 
         $product = Product::where('slug', $slug)->with('productImages')->first();
-        if($product != null)
-        {
+        if ($product != null) {
             $relatedProducts = Product::where('sub_category_id', $product->sub_category_id)
                 ->where('status', 1)
                 ->orderBy('created_at', 'desc')
                 ->get();
-//            dd($relatedProducts);
-        }
-        else
-        {
+        } else {
             abort(404);
         }
-//        dd($relatedProducts);
-        return view('front.product', compact('categories','product','relatedProducts'));
+        return view('front.product', compact('categories', 'product', 'relatedProducts'));
     }
 }
